@@ -22,7 +22,7 @@ import contacts.model.api.Events;
 import contacts.model.api.Item;
 import contacts.model.api.Name;
 import contacts.model.api.Oraganisation;
-import contacts.model.api.Phone;
+import contacts.model.api.CPhone;
 import contacts.model.api.Postal;
 import contacts.model.api.Type;
 import contacts.provider.JioContactsProvider;
@@ -81,7 +81,9 @@ public class JioContactQuery extends BaseJioQuery {
      */
 
     public List<ContactsInfo> fetchContactQuery(String LIMIT) {
-        return fetchContactQuery(LIMIT, null);
+        //return fetchContactQuery(LIMIT, null);
+
+        return null;
     }
 
 
@@ -93,7 +95,7 @@ public class JioContactQuery extends BaseJioQuery {
      * @return
      */
 
-    public List<ContactsInfo> fetchContactQuery(String LIMIT, String contactIdentity) {
+   /* public List<ContactsInfo> fetchContactQuery(String LIMIT, String contactIdentity) {
         Uri CONTENT_URI = JioContactsProvider.JioContactsColumns.CONTENT_URI;
 
         if (!TextUtils.isEmpty(LIMIT)) {
@@ -166,7 +168,7 @@ public class JioContactQuery extends BaseJioQuery {
                 contactsInfo.setRelation(relation);
 
                 //PHONE
-                Phone phone = new Phone();
+                CPhone phone = new CPhone();
                 phone.setHome(fetchCursor.getString(columnIndexHomePhone));
                 phone.setMobile(fetchCursor.getString(columnIndexMobilePhone));
                 phone.setWork(fetchCursor.getString(columnIndexMobileWork));
@@ -246,7 +248,7 @@ public class JioContactQuery extends BaseJioQuery {
 
         return null;
 
-    }
+    }*/
 
     /**
      * Fetch all the contactInfo

@@ -1,14 +1,9 @@
-package common;
+package com.bbmyjio.contactextractor.common;
 
 import android.content.Context;
-import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.telephony.TelephonyManager;
-import android.text.TextUtils;
-
 
 
 /**

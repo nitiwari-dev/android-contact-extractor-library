@@ -1,4 +1,4 @@
-package common.permissions;
+package com.bbmyjio.contactextractor.common.permissions;
 
 import android.content.Context;
 import android.content.SharedPreferences;

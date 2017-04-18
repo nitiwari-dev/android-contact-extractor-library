@@ -1,4 +1,4 @@
-package common.permissions;
+package com.bbmyjio.contactextractor.common.permissions;
 
 import android.Manifest;
 import android.app.Activity;

@@ -7,7 +7,7 @@ public class ContactsInfo
 {
     private String identity;
 
-    private Phone phone;
+    private CPhone phone;
 
     private Postal postal;
 
@@ -37,12 +37,12 @@ public class ContactsInfo
         this.identity = identity;
     }
 
-    public Phone getPhone ()
+    public CPhone getPhone ()
     {
         return phone;
     }
 
-    public void setPhone (Phone phone)
+    public void setPhone (CPhone phone)
     {
         this.phone = phone;
     }

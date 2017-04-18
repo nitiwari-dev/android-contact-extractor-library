@@ -1,7 +1,6 @@
 package com.bbmyjio.contactextractor;
 
 import android.Manifest;
-import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -9,11 +8,18 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import common.permissions.RunTimePermissionWrapper;
-import contacts.query.JioContactQuery;
+import com.bbmyjio.contactextractor.common.permissions.RunTimePermissionWrapper;
+
+import java.util.List;
+
+import contacts.model.api.CPhone;
 import contacts.services.JioContactIntentService;
+import cquery.CList;
+import cquery.CQuery;
+import i.ICCallback;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
     Context mContext;
 
     String[] WALK_THROUGH = new String[]{Manifest.permission.READ_CONTACTS};
+
+    private RecyclerView mRecyclerView;
 
 
     @Override
@@ -32,15 +40,21 @@ public class MainActivity extends AppCompatActivity {
 
         mContext = MainActivity.this;
 
+        initView();
+
         init();
 
         RunTimePermissionWrapper.handleRunTimePermission(MainActivity.this, RunTimePermissionWrapper.REQUEST_CODE.MULTIPLE_WALKTHROUGH, WALK_THROUGH);
 
     }
 
+    private void initView() {
+        mRecyclerView = (RecyclerView) findViewById(R.id.contactRecyclerView);
+    }
+
     private void init() {
         if (RunTimePermissionWrapper.isAllPermissionGranted(this, WALK_THROUGH)) {
-            rawContact();
+            readAndFillContacts();
         }
     }
 
@@ -48,69 +62,50 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        //queryFirstNameLastName();
-        rawContact();
+        readAndFillContacts();
     }
 
-    private void queryFirstNameLastName() {
-
-        new Thread(new Runnable() {
+    private void readAndFillContacts() {
+        CQuery cQuery = CQuery.getInstance(this);
+        cQuery.build(new ICCallback() {
             @Override
-            public void run() {
+            public void onContactSuccess(List<CList> mList) {
+                Log.d(TAG, "|onContactSuccess count|" + mList.size());
 
-                String whereName = ContactsContract.Data.MIMETYPE + " = ?";
-                String[] whereNameParams = new String[]{ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE};
-                Cursor nameCur = getContentResolver().query(ContactsContract.Data.CONTENT_URI, null, whereName, whereNameParams, ContactsContract.CommonDataKinds.Email.ADDRESS);
-                while (nameCur.moveToNext()) {
-                    String given = nameCur.getString(nameCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME));
-                    String family = nameCur.getString(nameCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME));
-                    String display = nameCur.getString(nameCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME));
+                if (mList != null) {
+                    for (CList cList : mList) {
+                        Log.d(TAG, "|ID|" + cList.id);
 
-                    Log.d(TAG, "|givenName|" + given + "|family|" + family + "|display|" + display);
+                        CPhone cPhone = cList.phone;
+                        if (cPhone != null) {
+                            List<String> mobile = cPhone.mobile;
+                            if (mobile != null && mobile.size() > 0) {
+                                for (String mo : mobile)
+                                    Log.d(TAG, "|Mobile|" + mo);
+                            }
+
+
+                            List<String> home = cPhone.home;
+                            if (home != null && home.size() > 0) {
+                                for (String ho : home)
+                                    Log.d(TAG, "|Home|" + ho);
+                            }
+
+                            List<String> work = cPhone.work;
+                            if (work != null && work.size() > 0) {
+                                for (String wo : work)
+                                    Log.d(TAG, "|Work|" + wo);
+                            }
+                        }
+                    }
                 }
-                nameCur.close();
             }
-        }).start();
-    }
 
-
-    //new String[] { "com.whatsapp" }
-
-    private void rawContact() {
-        Intent intent = new Intent(mContext, JioContactIntentService.class);
-        mContext.startService(intent);
-
-       /* new Thread(new Runnable() {
             @Override
-            public void run() {
-                new JioContactQuery(mContext).insertContactList();
-            *//*  Cursor c = getContentResolver().query(
-                        ContactsContract.RawContacts.CONTENT_URI,
-                        new String[]{ContactsContract.RawContacts.CONTACT_ID, ContactsContract.RawContacts.DISPLAY_NAME_PRIMARY, ContactsContract.RawContacts.ACCOUNT_INFO, ContactsContract.RawContacts.ACCOUNT_TYPE},
-                        null,
-                        null,
-                        null);
-
-                //ArrayList<String> myWhatsappContacts = new ArrayList<String>();
-
-
-                while (c.moveToNext()) {
-                    int contactNameColumn = c.getColumnIndex(ContactsContract.RawContacts.DISPLAY_NAME_PRIMARY);
-                    int accName = c.getColumnIndex(ContactsContract.RawContacts.ACCOUNT_INFO);
-                    int accType = c.getColumnIndex(ContactsContract.RawContacts.CONTACT_ID);
-
-                    // You can also read RawContacts.CONTACT_ID to read the
-                    // ContactsContract.Contacts table or any of the other related ones.
-
-                    Log.d(TAG, "|DISPLAY NAME|" + c.getString(contactNameColumn) + "\n"
-                            + "|ACCOUNT_INFO|" + c.getString(accName) + "|CONTACT_ID|" + c.getString(accType));
-
-                    //myWhatsappContacts.add(c.getString(contactNameColumn));
-                }
-*//*
-
+            public void onContactError(Throwable throwable) {
+                throwable.printStackTrace();
+                Log.d(TAG, "|onContactSuccess count|" + throwable.getLocalizedMessage());
             }
-        }).start();*/
+        });
     }
 }

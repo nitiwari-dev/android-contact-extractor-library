@@ -309,6 +309,16 @@ abstract public class BaseJioQuery extends JioContactConstants {
         return jioContactModel;
     }
 
+   /* CQuery.getInstance().limit(10).skip(20).id().getAllInfo(new ICQuer(){
+        @Override
+
+    });
+
+    CQuery.getInstance().getAllInfo(int type, new ICQuery(){
+
+        @Override
+
+    })*/
     private void getName() {
         String orgWhere = ContactsContract.Data.MIMETYPE + " = ? and " + ContactsContract.Data.CONTACT_ID + "= ?";
         String[] orgWhereParams = new String[]{
@@ -332,10 +342,6 @@ abstract public class BaseJioQuery extends JioContactConstants {
             }
             orgCur.close();
         }
-
-    }
-
-    void getPushContactInfo() {
 
     }
 }
