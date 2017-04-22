@@ -2,24 +2,38 @@ package com.bbmyjio.contactextractor;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
+import android.database.sqlite.SQLiteQueryBuilder;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.ArrayAdapter;
 
+import com.bbmyjio.contactextractor.adapter.MyAdapter;
+import com.bbmyjio.contactextractor.cmodels.CEmail;
+import com.bbmyjio.contactextractor.cmodels.CName;
+import com.bbmyjio.contactextractor.cmodels.ItemData;
 import com.bbmyjio.contactextractor.common.permissions.RunTimePermissionWrapper;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
-import contacts.model.api.CPhone;
-import contacts.services.JioContactIntentService;
-import cquery.CList;
-import cquery.CQuery;
-import i.ICCallback;
+import com.bbmyjio.contactextractor.cquery.CList;
+import com.bbmyjio.contactextractor.cquery.CQuery;
+import com.bbmyjio.contactextractor.i.ICCallback;
+import com.bbmyjio.contactextractor.i.IContactQuery;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,7 +63,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
+
+        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration();
         mRecyclerView = (RecyclerView) findViewById(R.id.contactRecyclerView);
+        mRecyclerView.addItemDecoration(itemDecoration);
     }
 
     private void init() {
@@ -67,39 +84,69 @@ public class MainActivity extends AppCompatActivity {
 
     private void readAndFillContacts() {
         CQuery cQuery = CQuery.getInstance(this);
+        cQuery.limit("20");
+
+
+        List<Integer> mList = new ArrayList<>();
+        mList.add(IContactQuery.Filter.ONLY_NAME);
+        mList.add(IContactQuery.Filter.ONLY_PHOTO_URI);
+
+        cQuery.filter(mList);
         cQuery.build(new ICCallback() {
             @Override
             public void onContactSuccess(List<CList> mList) {
                 Log.d(TAG, "|onContactSuccess count|" + mList.size());
 
-                if (mList != null) {
+                List<ItemData> mListAdapter = new ArrayList<>();
+                if (mList != null && !mList.isEmpty()) {
                     for (CList cList : mList) {
+
                         Log.d(TAG, "|ID|" + cList.id);
 
-                        CPhone cPhone = cList.phone;
-                        if (cPhone != null) {
-                            List<String> mobile = cPhone.mobile;
-                            if (mobile != null && mobile.size() > 0) {
-                                for (String mo : mobile)
-                                    Log.d(TAG, "|Mobile|" + mo);
+                        if (cList.getcName() != null) {
+                            CName cName = cList.getcName();
+                            Log.d(TAG, "|Display Name|" + cName.getDisplayName() + "|Given name|" + cName.getGivenName()
+                                    + "|Family name|" + cName.getFamilyName());
+
+                            ItemData itemData = new ItemData(cName.getDisplayName(), uriToBitmapConverter(cList.photoUri));
+
+                            mListAdapter.add(itemData);
+
+
+                        }
+
+                        if (cList.getcEmail() != null){
+                            CEmail cEmail = cList.getcEmail();
+
+                            for (String s : cEmail.mobile){
+                                Log.d(TAG, "| Mobile Email |" + s);
                             }
 
-
-                            List<String> home = cPhone.home;
-                            if (home != null && home.size() > 0) {
-                                for (String ho : home)
-                                    Log.d(TAG, "|Home|" + ho);
+                            for (String s : cEmail.work){
+                                Log.d(TAG, "| Mobile Work |" + s);
                             }
 
-                            List<String> work = cPhone.work;
-                            if (work != null && work.size() > 0) {
-                                for (String wo : work)
-                                    Log.d(TAG, "|Work|" + wo);
+                            for (String s : cEmail.home){
+                                Log.d(TAG, "| Mobile home |" + s);
                             }
                         }
+
+                        //ItemData itemData = new ItemData(cName.getDisplayName(), uriToBitmapConverter(cList.photoUri));
+
+                        //mListAdapter.add(itemData);
+
+
+
+
                     }
                 }
+
+                MyAdapter mAdapter = new MyAdapter(mListAdapter);
+                mRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+                mRecyclerView.setAdapter(mAdapter);
+
             }
+
 
             @Override
             public void onContactError(Throwable throwable) {
@@ -108,4 +155,37 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    Bitmap uriToBitmapConverter(String uriString) {
+        try {
+            Uri uri = Uri.parse(uriString);
+            return MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+        } catch (FileNotFoundException fnf){
+            fnf.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public class DividerItemDecoration extends RecyclerView.ItemDecoration {
+
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            super.getItemOffsets(outRect, view, parent, state);
+
+            if (parent.getChildAdapterPosition(view) == 0) {
+                return;
+            }
+
+            outRect.top = 10;
+        }
+
+    }
+
 }

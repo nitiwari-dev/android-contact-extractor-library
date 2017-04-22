@@ -18,10 +18,10 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <provider android:name="contacts.provider.JioContactsProvider"
+        <provider android:name=".contacts.provider.JioContactsProvider"
                   android:authorities="com.bbmyjio.contactextractor.jiocontacts"/>
 
-        <service android:name="contacts.services.JioContactIntentService"/>
+        <service android:name=".contacts.services.JioContactIntentService"/>
     </application>
 
 </manifest>
