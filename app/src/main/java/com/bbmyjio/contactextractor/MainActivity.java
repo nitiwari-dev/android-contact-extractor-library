@@ -1,12 +1,11 @@
 package com.bbmyjio.contactextractor;
 
 import android.Manifest;
+import android.content.ContentResolver;
 import android.content.Context;
-import android.database.sqlite.SQLiteQueryBuilder;
+import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -15,25 +14,34 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import com.bbmyjio.contactextractor.adapter.MyAdapter;
-import com.bbmyjio.contactextractor.cmodels.CEmail;
 import com.bbmyjio.contactextractor.cmodels.CName;
 import com.bbmyjio.contactextractor.cmodels.ItemData;
 import com.bbmyjio.contactextractor.common.permissions.RunTimePermissionWrapper;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
+import com.bbmyjio.contactextractor.cquery.BaseGenericCQuery;
 import com.bbmyjio.contactextractor.cquery.CList;
 import com.bbmyjio.contactextractor.cquery.CQuery;
+import com.bbmyjio.contactextractor.cquery.GenericCList;
+import com.bbmyjio.contactextractor.cquery.IGenericQuery;
 import com.bbmyjio.contactextractor.i.ICCallback;
 import com.bbmyjio.contactextractor.i.IContactQuery;
+import com.bbmyjio.contactextractor.i.IGenericCallback;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -72,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
     private void init() {
         if (RunTimePermissionWrapper.isAllPermissionGranted(this, WALK_THROUGH)) {
             readAndFillContacts();
+            //gettingPhoneContacts();
         }
     }
 
@@ -80,78 +89,37 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         readAndFillContacts();
+        //gettingPhoneContacts();
     }
 
     private void readAndFillContacts() {
         CQuery cQuery = CQuery.getInstance(this);
-        cQuery.limit("20");
-
-
-        List<Integer> mList = new ArrayList<>();
-        mList.add(IContactQuery.Filter.ONLY_NAME);
-        mList.add(IContactQuery.Filter.ONLY_PHOTO_URI);
-
-        cQuery.filter(mList);
-        cQuery.build(new ICCallback() {
+        cQuery.filter(IContactQuery.Filter.ONLY_GENERIC);
+        cQuery.build(new IGenericCallback() {
             @Override
-            public void onContactSuccess(List<CList> mList) {
-                Log.d(TAG, "|onContactSuccess count|" + mList.size());
-
+            public void onContactSuccess(List<GenericCList> mList) {
                 List<ItemData> mListAdapter = new ArrayList<>();
                 if (mList != null && !mList.isEmpty()) {
-                    for (CList cList : mList) {
+                    for (GenericCList cList : mList) {
 
-                        Log.d(TAG, "|ID|" + cList.id);
+                        Log.d(TAG, "|Name|" + cList.getDisplayName());
 
-                        if (cList.getcName() != null) {
-                            CName cName = cList.getcName();
-                            Log.d(TAG, "|Display Name|" + cName.getDisplayName() + "|Given name|" + cName.getGivenName()
-                                    + "|Family name|" + cName.getFamilyName());
+                        ItemData itemData = new ItemData(cList.getDisplayName() + "" + "\n Home - " + TextUtils.join(",", cList.getcPhone().getHome()) + "\n Mobile " +
+                                TextUtils.join(",", cList.getcPhone().getMobile()) + "\n Work - " + TextUtils.join(",", cList.getcPhone().getWork()) + "\n", uriToBitmapConverter(cList.getPhotoUri()));
 
-                            ItemData itemData = new ItemData(cName.getDisplayName(), uriToBitmapConverter(cList.photoUri));
-
-                            mListAdapter.add(itemData);
-
-
-                        }
-
-                        if (cList.getcEmail() != null){
-                            CEmail cEmail = cList.getcEmail();
-
-                            for (String s : cEmail.mobile){
-                                Log.d(TAG, "| Mobile Email |" + s);
-                            }
-
-                            for (String s : cEmail.work){
-                                Log.d(TAG, "| Mobile Work |" + s);
-                            }
-
-                            for (String s : cEmail.home){
-                                Log.d(TAG, "| Mobile home |" + s);
-                            }
-                        }
-
-                        //ItemData itemData = new ItemData(cName.getDisplayName(), uriToBitmapConverter(cList.photoUri));
-
-                        //mListAdapter.add(itemData);
-
-
-
-
+                        mListAdapter.add(itemData);
                     }
                 }
 
                 MyAdapter mAdapter = new MyAdapter(mListAdapter);
                 mRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
                 mRecyclerView.setAdapter(mAdapter);
-
             }
-
 
             @Override
             public void onContactError(Throwable throwable) {
-                throwable.printStackTrace();
-                Log.d(TAG, "|onContactSuccess count|" + throwable.getLocalizedMessage());
+
+
             }
         });
     }
@@ -161,12 +129,12 @@ public class MainActivity extends AppCompatActivity {
         try {
             Uri uri = Uri.parse(uriString);
             return MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
-        } catch (FileNotFoundException fnf){
-            fnf.printStackTrace();
+        } catch (FileNotFoundException fnf) {
+            //fnf.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         } catch (NullPointerException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
 
         return null;
@@ -188,4 +156,53 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void gettingPhoneContacts() {
+
+        List<ItemData> mListAdapter = new ArrayList<>();
+
+        ContentResolver cr = this.getContentResolver();
+
+        // Read Contacts
+        Cursor fetchCursor = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.Contacts.DISPLAY_NAME + " ASC ");
+
+        if (fetchCursor == null || fetchCursor.getCount() == 0)
+            return;
+
+        Map<String, GenericCList> cListMap = new HashMap<>();
+
+        while (fetchCursor.moveToNext()) {
+
+            String id = fetchCursor.getString(fetchCursor.getColumnIndex(ContactsContract.Contacts._ID));
+            String contactId = fetchCursor.getString(fetchCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
+
+            GenericCList genericCList = new GenericCList();
+
+           /* IGenericQuery iGenericQuery = new BaseGenericCQuery(fetchCursor, cListMap, id, contactId);
+
+            genericCList.setcPhone(iGenericQuery.getPhone());
+            genericCList.setDisplayName(iGenericQuery.getName());
+            genericCList.setId(id);
+            genericCList.setContactId(contactId);
+            genericCList.setPhotoUri(iGenericQuery.getPhotoUri());
+
+            cListMap.put(contactId, genericCList);*/
+        }
+
+        ArrayList<GenericCList> genericCLists = new ArrayList<>(cListMap.values());
+
+        for (GenericCList genericCList : genericCLists) {
+            ItemData itemData = new ItemData(genericCList.getDisplayName() + "" + "\n Home - " + TextUtils.join(",", genericCList.getcPhone().getHome()) + "\n Mobile " +
+                    TextUtils.join(",", genericCList.getcPhone().getMobile()) + "\n Work - " + TextUtils.join(",", genericCList.getcPhone().getWork()) + "\n", null);
+
+            mListAdapter.add(itemData);
+
+        }
+
+        Toast.makeText(this, " total contact count " + genericCLists.size(), Toast.LENGTH_SHORT).show();
+
+
+        MyAdapter mAdapter = new MyAdapter(mListAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+        mRecyclerView.setAdapter(mAdapter);
+    }
 }

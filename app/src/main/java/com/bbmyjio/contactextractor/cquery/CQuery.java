@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.bbmyjio.contactextractor.i.ICCallback;
+import com.bbmyjio.contactextractor.i.IGenericCallback;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.BiConsumer;
@@ -34,7 +35,7 @@ public class CQuery {
 
     private String orderBy;
 
-    private List<Integer> mListFilterType = new ArrayList<>();
+    private int mListFilterType;
 
 
     private CQuery(Context context) {
@@ -61,38 +62,60 @@ public class CQuery {
 
     public void build(final ICCallback iContact) {
 
+       /* if (!PermissionWrapper.hasContactsPermissions(mContext)) {
+            throw new SecurityException("Contact Permission Missing");
+        }
+
+        new CListExtracter(mContext).getList(mListFilterType, orderBy, limit, skip)
+                .subscribeOn(new IoScheduler())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BiConsumerSingleObserver<>(new BiConsumer<List<CList>, Throwable>() {
+                    @Override
+                    public void accept(List<CList> cLists, Throwable throwable) throws Exception {
+                        if (iContact == null)
+                            return;
+
+                        if (throwable == null) iContact.onContactSuccess(cLists);
+                        else iContact.onContactError(throwable);
+                    }
+                }));*/
+    }
+
+    public void build(final IGenericCallback iGenericQuery) {
         if (!PermissionWrapper.hasContactsPermissions(mContext)) {
             throw new SecurityException("Contact Permission Missing");
         }
 
-        new ContactListEx(mContext).getList(mListFilterType, orderBy, limit, skip)
+
+        new CListExtracter(mContext).getList(mListFilterType, orderBy, limit, skip)
                 .subscribeOn(new IoScheduler())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BiConsumerSingleObserver<>(new BiConsumer<List<CList>, Throwable>() {
-            @Override
-            public void accept(List<CList> cLists, Throwable throwable) throws Exception {
-                if (iContact == null)
-                    return;
+                .subscribe(new BiConsumerSingleObserver<>(new BiConsumer<List<GenericCList>, Throwable>() {
+                    @Override
+                    public void accept(List<GenericCList> cLists, Throwable throwable) throws Exception {
+                        if (iGenericQuery == null)
+                            return;
 
-                if (throwable == null) iContact.onContactSuccess(cLists);
-                else iContact.onContactError(throwable);
-            }
-        }));
+                        if (throwable == null) iGenericQuery.onContactSuccess(cLists);
+                        else iGenericQuery.onContactError(throwable);
+                    }
+                }));
     }
-
 
     public CQuery filter(int type) {
-        mListFilterType.add(type);
+        mListFilterType = type;
         return this;
     }
 
-    public CQuery filter(List<Integer> type){
+   /* public CQuery filter(List<Integer> type) {
         mListFilterType.addAll(type);
         return this;
-    }
+    }*/
 
     public CQuery orderBy(String orderBy) {
         this.orderBy = orderBy;
         return this;
     }
+
+
 }

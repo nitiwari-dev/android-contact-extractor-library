@@ -1,5 +1,8 @@
 package com.bbmyjio.contactextractor.cquery;
 
+import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
 
@@ -13,7 +16,15 @@ import java.util.List;
 
 abstract class BaseContactListEx {
 
-    protected CList fetchAll(IContactQuery icQuery, CList cList) {
+    private Context mContext;
+
+    public BaseContactListEx(Context mContext) {
+        this.mContext = mContext;
+    }
+
+    private static final String TAG = BaseContactListEx.class.getSimpleName();
+
+    /*protected CList fetchAll(IContactQuery icQuery, CList cList) {
         cList.setcAccount(icQuery.getAccount());
         cList.setcEmail(icQuery.getEmail());
         cList.setcPhone(icQuery.getPhone());
@@ -23,7 +34,7 @@ abstract class BaseContactListEx {
         cList.setcPostCode(icQuery.getPostCode());
         cList.setPhotoUri(icQuery.getPhotoUri());
         return cList;
-    }
+    }*/
 
     protected CList queryFilterType(IContactQuery icQuery, List<Integer> mFilterType, CList cList) {
 
@@ -61,6 +72,21 @@ abstract class BaseContactListEx {
         return cList;
     }
 
+    protected GenericCList queryFilterType(IGenericQuery icQuery, int mFilterType, GenericCList cList) {
+
+        switch (mFilterType) {
+            case IContactQuery.Filter.ONLY_GENERIC:
+                cList.setcPhone(icQuery.getPhone());
+                cList.setDisplayName(icQuery.getName());
+                cList.setPhotoUri(icQuery.getPhotoUri());
+                break;
+            default:
+                break;
+        }
+
+        return cList;
+    }
+
     protected String orderBy(String orderBy, String limit, String skip) {
 
         StringBuilder sBuilder = new StringBuilder();
@@ -81,4 +107,21 @@ abstract class BaseContactListEx {
 
         return projections;
     }
+
+
+    protected Cursor getCursorByType(int type) {
+
+        switch (type) {
+            case IContactQuery.Filter.ONLY_GENERIC:
+                Uri CONTENT_URI = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
+                Cursor fetchCursor = mContext.getContentResolver().query(CONTENT_URI,
+                        null, null, null, null);
+
+                return fetchCursor;
+        }
+
+        return null;
+
+    }
+
 }

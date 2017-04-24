@@ -34,9 +34,12 @@ public class BaseContactQuery implements IContactQuery {
 
     private String identity;
 
-    protected BaseContactQuery(Context context, String identity) {
+    private Cursor cursor;
+
+    public BaseContactQuery(Context context, Cursor cursor, String identity) {
         this.context = context;
         this.identity = identity;
+        this.cursor = cursor;
     }
 
     ContentResolver getCR() {
@@ -229,7 +232,7 @@ public class BaseContactQuery implements IContactQuery {
 
     @Override
     public CName getName() {
-        String orgWhere = ContactsContract.Data.MIMETYPE + " = ? and " + ContactsContract.Data.CONTACT_ID + "= ?";
+        /*String orgWhere = ContactsContract.Data.MIMETYPE + " = ? and " + ContactsContract.Data.CONTACT_ID + "= ?";
         String[] orgWhereParams = new String[]{
                 ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE, identity};
 
@@ -260,8 +263,18 @@ public class BaseContactQuery implements IContactQuery {
             orgCur.close();
 
             return cName;
-        }
-        return null;
+        }*/
+
+        CName cName = new CName();
+        String familyName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME));
+        String displayName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME));
+        String givenName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME));
+
+        cName.setFamilyName(familyName);
+        cName.setDisplayName(displayName);
+        cName.setGivenName(givenName);
+
+        return cName;
     }
 
     @Override

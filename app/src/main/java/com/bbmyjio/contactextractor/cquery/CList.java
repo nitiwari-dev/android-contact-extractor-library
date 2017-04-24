@@ -17,6 +17,8 @@ import com.bbmyjio.contactextractor.contacts.model.api.CPhone;
 
 public class CList {
     public String id;
+    public String contactId;
+
     public String photoUri;
     public CName cName;
     public CEmail cEmail;
@@ -107,5 +109,13 @@ public class CList {
 
     public void setcEvents(CEvents cEvents) {
         this.cEvents = cEvents;
+    }
+
+    public String getContactId() {
+        return contactId;
+    }
+
+    public void setContactId(String contactId) {
+        this.contactId = contactId;
     }
 }
