@@ -3,6 +3,8 @@ package com.bbmyjio.contactextractor.cquery;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 
+import com.bbmyjio.contactextractor.contacts.model.api.CPhone;
+
 import java.util.HashSet;
 
 /**
@@ -28,11 +30,11 @@ public class BaseGenericCQuery implements IGenericQuery {
     }
 
     @Override
-    public GenericCList.CPhone getPhone() {
-        GenericCList.CPhone cPhone = genericContact.getcPhone();
+    public CPhone getPhone() {
+        CPhone cPhone = genericContact.getcPhone();
 
         if (cPhone == null){
-            cPhone = new GenericCList.CPhone();
+            cPhone = new CPhone();
         }
         HashSet<String> homeSet = cPhone.getHome();
         HashSet<String> workSet = cPhone.getWork();
@@ -56,8 +58,6 @@ public class BaseGenericCQuery implements IGenericQuery {
         cPhone.setHome(homeSet);
         cPhone.setMobile(mobileSet);
         cPhone.setWork(workSet);
-
-
         return cPhone;
     }
 

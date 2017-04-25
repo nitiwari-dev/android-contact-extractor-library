@@ -1,8 +1,7 @@
 package com.bbmyjio.contactextractor.cquery;
 
 
-import java.util.HashSet;
-import java.util.Set;
+import com.bbmyjio.contactextractor.contacts.model.api.CPhone;
 
 /**
  * Created by Nitesh on 22-04-2017.
@@ -10,13 +9,11 @@ import java.util.Set;
 
 public class GenericCList {
 
-    String _id;
-    String contactId;
-
-    String displayName;
-    CPhone cPhone;
-
-    String photoUri;
+    private String _id;
+    private String contactId;
+    private String displayName;
+    private CPhone cPhone;
+    private String photoUri;
 
     public CPhone getcPhone() {
         return cPhone;
@@ -56,35 +53,5 @@ public class GenericCList {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
-    }
-
-    public static class CPhone {
-        private HashSet<String> work = new HashSet<>();
-        private HashSet<String> home = new HashSet<>();
-        private HashSet<String> mobile = new HashSet<>();
-
-        public HashSet<String> getWork() {
-            return work;
-        }
-
-        public void setWork(HashSet<String> work) {
-            this.work = work;
-        }
-
-        public HashSet<String> getHome() {
-            return home;
-        }
-
-        public void setHome(HashSet<String> home) {
-            this.home = home;
-        }
-
-        public HashSet<String> getMobile() {
-            return mobile;
-        }
-
-        public void setMobile(HashSet<String> mobile) {
-            this.mobile = mobile;
-        }
     }
 }

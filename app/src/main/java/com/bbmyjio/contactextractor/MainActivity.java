@@ -20,26 +20,18 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.bbmyjio.contactextractor.adapter.MyAdapter;
-import com.bbmyjio.contactextractor.cmodels.CName;
 import com.bbmyjio.contactextractor.cmodels.ItemData;
 import com.bbmyjio.contactextractor.common.permissions.RunTimePermissionWrapper;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import com.bbmyjio.contactextractor.cquery.BaseGenericCQuery;
-import com.bbmyjio.contactextractor.cquery.CList;
 import com.bbmyjio.contactextractor.cquery.CQuery;
 import com.bbmyjio.contactextractor.cquery.GenericCList;
-import com.bbmyjio.contactextractor.cquery.IGenericQuery;
-import com.bbmyjio.contactextractor.i.ICCallback;
 import com.bbmyjio.contactextractor.i.IContactQuery;
 import com.bbmyjio.contactextractor.i.IGenericCallback;
 
@@ -94,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void readAndFillContacts() {
         CQuery cQuery = CQuery.getInstance(this);
-        cQuery.filter(IContactQuery.Filter.ONLY_GENERIC);
+        cQuery.filter(IContactQuery.Filter.COMMON);
         cQuery.build(new IGenericCallback() {
             @Override
             public void onContactSuccess(List<GenericCList> mList) {

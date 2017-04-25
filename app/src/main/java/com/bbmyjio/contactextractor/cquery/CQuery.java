@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.bbmyjio.contactextractor.common.permissions.PermissionWrapper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.bbmyjio.contactextractor.i.ICCallback;
@@ -62,23 +61,23 @@ public class CQuery {
 
     public void build(final ICCallback iContact) {
 
-       /* if (!PermissionWrapper.hasContactsPermissions(mContext)) {
+       if (!PermissionWrapper.hasContactsPermissions(mContext)) {
             throw new SecurityException("Contact Permission Missing");
         }
 
-        new CListExtracter(mContext).getList(mListFilterType, orderBy, limit, skip)
+        new CListExtractor(mContext).getList(mListFilterType, orderBy, limit, skip)
                 .subscribeOn(new IoScheduler())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BiConsumerSingleObserver<>(new BiConsumer<List<CList>, Throwable>() {
+                .subscribe(new BiConsumer<List<CList>, Throwable>() {
                     @Override
-                    public void accept(List<CList> cLists, Throwable throwable) throws Exception {
+                    public void accept(List<CList> genericCLists, Throwable throwable) throws Exception {
                         if (iContact == null)
                             return;
 
-                        if (throwable == null) iContact.onContactSuccess(cLists);
-                        else iContact.onContactError(throwable);
+                        if (throwable == null)
+                            iContact.onContactSuccess(genericCLists);
                     }
-                }));*/
+                });
     }
 
     public void build(final IGenericCallback iGenericQuery) {
@@ -87,7 +86,7 @@ public class CQuery {
         }
 
 
-        new CListExtracter(mContext).getList(mListFilterType, orderBy, limit, skip)
+        new CommonCListExtracter(mContext).getList(mListFilterType, orderBy, limit, skip)
                 .subscribeOn(new IoScheduler())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BiConsumerSingleObserver<>(new BiConsumer<List<GenericCList>, Throwable>() {

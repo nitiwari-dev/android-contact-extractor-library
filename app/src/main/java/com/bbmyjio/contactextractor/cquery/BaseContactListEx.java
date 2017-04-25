@@ -10,6 +10,8 @@ import com.bbmyjio.contactextractor.i.IContactQuery;
 
 import java.util.List;
 
+import io.reactivex.Single;
+
 /**
  * Created by Nitesh on 22-04-2017.
  */
@@ -75,7 +77,7 @@ abstract class BaseContactListEx {
     protected GenericCList queryFilterType(IGenericQuery icQuery, int mFilterType, GenericCList cList) {
 
         switch (mFilterType) {
-            case IContactQuery.Filter.ONLY_GENERIC:
+            case IContactQuery.Filter.COMMON:
                 cList.setcPhone(icQuery.getPhone());
                 cList.setDisplayName(icQuery.getName());
                 cList.setPhotoUri(icQuery.getPhotoUri());
@@ -112,7 +114,7 @@ abstract class BaseContactListEx {
     protected Cursor getCursorByType(int type) {
 
         switch (type) {
-            case IContactQuery.Filter.ONLY_GENERIC:
+            case IContactQuery.Filter.COMMON:
                 Uri CONTENT_URI = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
                 Cursor fetchCursor = mContext.getContentResolver().query(CONTENT_URI,
                         null, null, null, null);
@@ -123,5 +125,4 @@ abstract class BaseContactListEx {
         return null;
 
     }
-
 }

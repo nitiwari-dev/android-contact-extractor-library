@@ -18,8 +18,8 @@ import com.bbmyjio.contactextractor.contacts.model.api.CPhone;
 public class CList {
     public String id;
     public String contactId;
-
     public String photoUri;
+
     public CName cName;
     public CEmail cEmail;
     public CPhone cPhone;
@@ -27,7 +27,6 @@ public class CList {
     public CPostBoxCity cPostCode;
     public COrganisation cOrg;
     public CEvents cEvents;
-    //public CGroups cGroups;
 
     public String getPhotoUri() {
         return photoUri;
@@ -36,16 +35,6 @@ public class CList {
     public void setPhotoUri(String photoUri) {
         this.photoUri = photoUri;
     }
-
-
-
-    /*public CGroups getcGroups() {
-        return cGroups;
-    }
-
-    public void setcGroups(CGroups cGroups) {
-        this.cGroups = cGroups;
-    }*/
 
     public String getId() {
         return id;
