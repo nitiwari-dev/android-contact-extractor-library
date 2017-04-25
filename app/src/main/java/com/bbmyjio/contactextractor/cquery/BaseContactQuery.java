@@ -20,6 +20,7 @@ import com.bbmyjio.contactextractor.contacts.model.api.CPhone;
 import com.bbmyjio.contactextractor.i.IContactQuery;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -36,10 +37,13 @@ public class BaseContactQuery implements IContactQuery {
 
     private Cursor cursor;
 
-    public BaseContactQuery(Context context, Cursor cursor, String identity) {
+    private CList cList;
+
+    public BaseContactQuery(Context context, Cursor cursor, CList cList, String identity) {
         this.context = context;
         this.identity = identity;
         this.cursor = cursor;
+        this.cList = cList;
     }
 
     ContentResolver getCR() {
@@ -49,7 +53,7 @@ public class BaseContactQuery implements IContactQuery {
 
     @Override
     public CEmail getEmail() {
-        String[] SELECTION_ARGS = new String[]{ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE, identity};
+/*        String[] SELECTION_ARGS = new String[]{ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE, identity};
 
         String SELECTION = ContactsContract.Data.MIMETYPE + " = ? and " + ContactsContract.Data.CONTACT_ID + " = ?";
 
@@ -92,13 +96,50 @@ public class BaseContactQuery implements IContactQuery {
 
         }
 
-        return null;
+        return null;*/
+
+
+        CEmail email = cList.getcEmail();
+        if (email == null) {
+            email = new CEmail();
+        }
+
+        HashSet<String> home = email.getHome();
+        HashSet<String> work = email.getWork();
+        HashSet<String> mobile = email.getMobile();
+        HashSet<String> other = email.getMobile();
+
+        int type = cursor.getInt(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.TYPE));
+        String data = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
+
+        switch (type) {
+            case ContactsContract.CommonDataKinds.Email.TYPE_WORK:
+                work.add(data);
+                break;
+            case ContactsContract.CommonDataKinds.Email.TYPE_HOME:
+                home.add(data);
+                break;
+            case ContactsContract.CommonDataKinds.Email.TYPE_MOBILE:
+                mobile.add(data);
+            default:
+                other.add(data);
+                break;
+        }
+
+        if (work.size() == 0 && home.size() == 0 && mobile.size() == 0 && other.size() == 0)
+            return null;
+
+        CEmail cEmail = new CEmail();
+        cEmail.setWork(work);
+        cEmail.setHome(home);
+        cEmail.setMobile(mobile);
+        return cEmail;
     }
 
     @Override
     public CPhone getPhone() {
 
-        String WHERE_CLAUSE = ContactsContract.Data.MIMETYPE + " = ? and " + ContactsContract.Data.CONTACT_ID + " = ?";
+       /* String WHERE_CLAUSE = ContactsContract.Data.MIMETYPE + " = ? and " + ContactsContract.Data.CONTACT_ID + " = ?";
 
         String PROJECTIONS[] = new String[]{ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.NUMBER};
 
@@ -108,9 +149,9 @@ public class BaseContactQuery implements IContactQuery {
 
         if (pCursor != null) {
 
-            List<String> home = new ArrayList<>();
-            List<String> work = new ArrayList<>();
-            List<String> mobile = new ArrayList<>();
+            HashSet<String> home = new HashSet<>();
+            HashSet<String> work = new HashSet<>();
+            HashSet<String> mobile = new HashSet<>();
 
             if (pCursor.getCount() == 0) {
                 pCursor.close();
@@ -139,18 +180,50 @@ public class BaseContactQuery implements IContactQuery {
 
             pCursor.close();
 
-            CPhone cPhone = new CPhone(work, home, mobile);
+            CPhone cPhone = new CPhone();
+            cPhone.setHome(home);
+            cPhone.setMobile(mobile);
+            cPhone.setWork(work);
             return cPhone;
 
         }
 
-        return null;
+        return null;*/
+
+        CPhone cPhone = cList.getcPhone();
+
+        if (cPhone == null) {
+            cPhone = new CPhone();
+        }
+        HashSet<String> homeSet = cPhone.getHome();
+        HashSet<String> workSet = cPhone.getWork();
+        HashSet<String> mobileSet = cPhone.getMobile();
+
+        String phoneNo = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+        String numberType = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
+
+        switch (Integer.valueOf(numberType)) {
+            case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
+                homeSet.add(phoneNo);
+                break;
+            case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
+                workSet.add(phoneNo);
+                break;
+            case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
+                mobileSet.add(phoneNo);
+            default:
+                break;
+        }
+        cPhone.setHome(homeSet);
+        cPhone.setMobile(mobileSet);
+        cPhone.setWork(workSet);
+        return cPhone;
     }
 
     @Override
     public CAccount getAccount() {
 
-        String WHERE_CLAUSE = ContactsContract.RawContacts._ID + " =? ";
+       /* String WHERE_CLAUSE = ContactsContract.RawContacts.A + " =? ";
 
         String PROJECTIONS[] = new String[]{ContactsContract.RawContacts.ACCOUNT_NAME, ContactsContract.RawContacts.ACCOUNT_TYPE};
 
@@ -186,12 +259,29 @@ public class BaseContactQuery implements IContactQuery {
             return cAccount;
         }
 
-        return null;
+        return null;*/
+
+
+        CAccount cAccount = new CAccount();
+
+        List<ContactGenericType> mContactGenericType = new ArrayList<>();
+
+        String accountName = cursor.getString(
+                cursor.getColumnIndex(ContactsContract.RawContacts.ACCOUNT_NAME));
+
+        String accountType = cursor.getString(
+                cursor.getColumnIndex(ContactsContract.RawContacts.ACCOUNT_TYPE));
+
+        mContactGenericType.add(new ContactGenericType(accountName, accountType));
+
+        cAccount.setmGenericType(mContactGenericType);
+
+        return cAccount;
     }
 
     @Override
     public CPostBoxCity getPostCode() {
-        String WHERE_CLAUSE = ContactsContract.Data.MIMETYPE + " = ? and " + ContactsContract.Data.CONTACT_ID + " = ?";
+       /* String WHERE_CLAUSE = ContactsContract.Data.MIMETYPE + " = ? and " + ContactsContract.Data.CONTACT_ID + " = ?";
 
         String WHERE_ARGS[] = new String[]{ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_ITEM_TYPE, identity};
 
@@ -226,7 +316,29 @@ public class BaseContactQuery implements IContactQuery {
 
         }
 
-        return null;
+        return null;*/
+
+
+        CPostBoxCity cPostBoxCityList = cList.getcPostCode();
+
+        if (cPostBoxCityList != null) {
+            cPostBoxCityList = new CPostBoxCity();
+        }
+
+
+        List<CPostBoxCity.PostCity> cPostCode = cPostBoxCityList.getmPostCity();
+
+        String poBox = cursor.getString(
+                cursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.POBOX));
+
+        String city = cursor.getString(
+                cursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.CITY));
+
+        cPostCode.add(new CPostBoxCity.PostCity(poBox, city));
+        cPostBoxCityList.setmPostCity(cPostCode);
+
+        return cPostBoxCityList;
+
     }
 
 
@@ -266,7 +378,7 @@ public class BaseContactQuery implements IContactQuery {
         }*/
 
         CName cName = new CName();
-        String familyName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME));
+        String familyName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME));
         String displayName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME));
         String givenName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME));
 
@@ -279,7 +391,7 @@ public class BaseContactQuery implements IContactQuery {
 
     @Override
     public COrganisation getOrg() {
-        String orgWhere = ContactsContract.Data.MIMETYPE + " = ? and " + ContactsContract.Data.CONTACT_ID + "= ?";
+        /*String orgWhere = ContactsContract.Data.MIMETYPE + " = ? and " + ContactsContract.Data.CONTACT_ID + "= ?";
         String[] orgWhereParams = new String[]{
                 ContactsContract.CommonDataKinds.Organization.CONTENT_ITEM_TYPE, identity};
 
@@ -302,14 +414,30 @@ public class BaseContactQuery implements IContactQuery {
             COrganisation cOrganisation = new COrganisation(companyOrgList);
 
             return cOrganisation;
-        }
+        }*/
 
-        return null;
+        COrganisation cOrganisation = cList.getcOrg();
+
+        if (cOrganisation == null)
+            cOrganisation = new COrganisation();
+
+
+        List<COrganisation.CompanyDepart> companyDeparts = cOrganisation.getCompanyOrgList();
+
+
+        String company = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Organization.COMPANY));
+        String department = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Organization.DEPARTMENT));
+
+        companyDeparts.add(new COrganisation.CompanyDepart(company, department));
+
+        cOrganisation.setCompanyOrgList(companyDeparts);
+
+        return cOrganisation;
     }
 
     @Override
     public CEvents getEvents() {
-        String WHERE_CLAUSE = ContactsContract.Data.MIMETYPE + " = ? and " + ContactsContract.Data.CONTACT_ID + " = ?";
+        /*String WHERE_CLAUSE = ContactsContract.Data.MIMETYPE + " = ? and " + ContactsContract.Data.CONTACT_ID + " = ?";
 
         String WHERE_ARGS[] = new String[]{ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE, identity};
 
@@ -347,9 +475,31 @@ public class BaseContactQuery implements IContactQuery {
 
             cursorEvents.close();
             return cEvents;
+        }*/
+
+
+        CEvents cEvents = new CEvents();
+
+        String startData = cursor.getString(
+                cursor.getColumnIndex(ContactsContract.CommonDataKinds.Event.START_DATE));
+
+        int type = cursor.getInt(
+                cursor.getColumnIndex(ContactsContract.CommonDataKinds.Event.TYPE));
+
+        switch (type) {
+            case ContactsContract.CommonDataKinds.Event.TYPE_ANNIVERSARY:
+                cEvents.setAnniversay(startData);
+                break;
+
+            case ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY:
+                cEvents.setBirthDay(startData);
+                break;
+            default:
+                break;
         }
 
-        return null;
+
+        return cEvents;
     }
 
     @Override
@@ -384,7 +534,8 @@ public class BaseContactQuery implements IContactQuery {
 
     @Override
     public String getPhotoUri() {
-        ContentResolver contentResolver = getCR();
+        return cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_URI));
+       /* ContentResolver contentResolver = getCR();
 
         try {
             Cursor cursor = contentResolver
@@ -418,6 +569,6 @@ public class BaseContactQuery implements IContactQuery {
         Uri person = ContentUris.withAppendedId(
                 ContactsContract.Contacts.CONTENT_URI, Long.valueOf(identity));
         return Uri.withAppendedPath(person,
-                ContactsContract.Contacts.Photo.CONTENT_DIRECTORY).toString();
+                ContactsContract.Contacts.Photo.CONTENT_DIRECTORY).toString();*/
     }
 }

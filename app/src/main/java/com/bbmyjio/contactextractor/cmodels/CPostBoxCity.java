@@ -9,10 +9,17 @@ import java.util.List;
 
 public class CPostBoxCity {
 
-    public List<PostCity> mPostCity;
+    private List<PostCity> mPostCity;
 
+    public List<PostCity> getmPostCity() {
+        return mPostCity;
+    }
 
-    public CPostBoxCity(List<PostCity> mPostCity) {
+    public void setmPostCity(List<PostCity> mPostCity) {
+        this.mPostCity = mPostCity;
+    }
+
+    public CPostBoxCity() {
         this.mPostCity = new ArrayList<>(mPostCity);
     }
 

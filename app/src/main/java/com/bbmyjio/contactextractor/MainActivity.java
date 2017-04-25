@@ -20,6 +20,9 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.bbmyjio.contactextractor.adapter.MyAdapter;
+import com.bbmyjio.contactextractor.cmodels.CAccount;
+import com.bbmyjio.contactextractor.cmodels.CEmail;
+import com.bbmyjio.contactextractor.cmodels.CName;
 import com.bbmyjio.contactextractor.cmodels.ItemData;
 import com.bbmyjio.contactextractor.common.permissions.RunTimePermissionWrapper;
 
@@ -30,8 +33,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.bbmyjio.contactextractor.cquery.CList;
 import com.bbmyjio.contactextractor.cquery.CQuery;
 import com.bbmyjio.contactextractor.cquery.GenericCList;
+import com.bbmyjio.contactextractor.i.ICCallback;
 import com.bbmyjio.contactextractor.i.IContactQuery;
 import com.bbmyjio.contactextractor.i.IGenericCallback;
 
@@ -85,8 +90,112 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void readAndFillContacts() {
+
         CQuery cQuery = CQuery.getInstance(this);
-        cQuery.filter(IContactQuery.Filter.COMMON);
+        cQuery.filter(IContactQuery.Filter.ONLY_ACCOUNT);
+        cQuery.build(new ICCallback() {
+            @Override
+            public void onContactSuccess(List<CList> mList) {
+                List<ItemData> mListAdapter = new ArrayList<>();
+                Toast.makeText(MainActivity.this, " Contacts count " + mList.size(), Toast.LENGTH_SHORT).show();
+                if (mList != null && !mList.isEmpty()) {
+                    for (CList cList : mList) {
+
+                        CAccount cAccount = cList.getcAccount();
+
+                        if (cAccount != null){
+                            ItemData itemData = new ItemData(cList.contactId
+                                    + "" + "\n Home - " + TextUtils.join(",", cList.getcEmail().getHome())
+                                    + "\n Mobile " +
+                                    TextUtils.join(",", cList.getcEmail().getMobile())
+                                    + "\n Work - " + TextUtils.join(",", cList.getcEmail().getWork()) + "\n", uriToBitmapConverter(cList.getPhotoUri()));
+
+                            mListAdapter.add(itemData);
+                        }
+
+                    }
+                }
+
+                MyAdapter mAdapter = new MyAdapter(mListAdapter);
+                mRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+                mRecyclerView.setAdapter(mAdapter);
+            }
+
+            @Override
+            public void onContactError(Throwable throwable) {
+
+            }
+        });
+
+
+
+        /*CQuery cQuery = CQuery.getInstance(this);
+        cQuery.filter(IContactQuery.Filter.ONLY_ACCOUNT);
+        cQuery.build(new ICCallback() {
+            @Override
+            public void onContactSuccess(List<CList> mList) {
+                List<ItemData> mListAdapter = new ArrayList<>();
+                Toast.makeText(MainActivity.this, " Contacts count " + mList.size(), Toast.LENGTH_SHORT).show();
+                if (mList != null && !mList.isEmpty()) {
+                    for (CList cList : mList) {
+
+                        CEmail cE = cList.getcEmail();
+
+                        if (cE != null){
+                            ItemData itemData = new ItemData(cList.contactId
+                                    + "" + "\n Home - " + TextUtils.join(",", cList.getcEmail().getHome())
+                                    + "\n Mobile " +
+                                    TextUtils.join(",", cList.getcEmail().getMobile())
+                                    + "\n Work - " + TextUtils.join(",", cList.getcEmail().getWork()) + "\n", uriToBitmapConverter(cList.getPhotoUri()));
+
+                            mListAdapter.add(itemData);
+                        }
+
+                    }
+                }
+
+                MyAdapter mAdapter = new MyAdapter(mListAdapter);
+                mRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+                mRecyclerView.setAdapter(mAdapter);
+            }
+
+            @Override
+            public void onContactError(Throwable throwable) {
+
+            }
+        });*/
+
+       /* cQuery.build(new ICCallback() {
+            @Override
+            public void onContactSuccess(List<CList> mList) {
+                List<ItemData> mListAdapter = new ArrayList<>();
+                if (mList != null && !mList.isEmpty()) {
+                    for (CList cList : mList) {
+
+                        CName cName = cList.getcName();
+
+                        if (cName != null){
+                            Log.d(TAG, "|Name|" + cList.getcName());
+
+                            ItemData itemData = new ItemData("Id:" +cList.getId() + "\nCId:" + cList.getContactId() +"Display Name: "+cName.getDisplayName() + "" + "\n Family Name - " + cName.getFamilyName() + "\nGiven Name " + cName.getGivenName(), uriToBitmapConverter(cList.getPhotoUri()));
+
+                            mListAdapter.add(itemData);
+                        }
+
+                    }
+                }
+
+                MyAdapter mAdapter = new MyAdapter(mListAdapter);
+                mRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+                mRecyclerView.setAdapter(mAdapter);
+            }
+
+            @Override
+            public void onContactError(Throwable throwable) {
+
+            }
+        });*/
+/*
         cQuery.build(new IGenericCallback() {
             @Override
             public void onContactSuccess(List<GenericCList> mList) {
@@ -114,6 +223,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+*/
     }
 
 

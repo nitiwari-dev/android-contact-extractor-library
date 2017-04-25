@@ -8,10 +8,14 @@ import java.util.List;
  */
 
 public class COrganisation {
-    public List<CompanyDepart> companyOrgList;
+    private List<CompanyDepart> companyOrgList = new ArrayList<>();
 
-    public COrganisation(List<CompanyDepart> companyOrgList) {
-        this.companyOrgList = new ArrayList<CompanyDepart>(companyOrgList);
+    public List<CompanyDepart> getCompanyOrgList() {
+        return companyOrgList;
+    }
+
+    public void setCompanyOrgList(List<CompanyDepart> companyOrgList) {
+        this.companyOrgList = companyOrgList;
     }
 
     public static class CompanyDepart {

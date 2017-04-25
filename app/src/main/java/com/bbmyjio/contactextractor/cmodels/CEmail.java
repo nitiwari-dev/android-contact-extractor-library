@@ -1,7 +1,6 @@
 package com.bbmyjio.contactextractor.cmodels;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 
 /**
  * Created by Nitesh on 04-04-2017.
@@ -9,13 +8,40 @@ import java.util.List;
 
 public class CEmail {
 
-    public List<String> work;
-    public List<String> home;
-    public List<String> mobile;
+    private HashSet<String> work = new HashSet<>();
+    private HashSet<String> home = new HashSet<>();
+    private HashSet<String> mobile = new HashSet<>();
+    private HashSet<String> other = new HashSet<>();
 
-    public CEmail(List<String> work, List<String> home, List<String> mobile) {
-        this.work = new ArrayList<>(work);
-        this.home = new ArrayList<>(home);
-        this.mobile = new ArrayList<>(mobile);
+    public HashSet<String> getOther() {
+        return other;
+    }
+
+    public void setOther(HashSet<String> other) {
+        this.other = other;
+    }
+
+    public HashSet<String> getWork() {
+        return work;
+    }
+
+    public void setWork(HashSet<String> work) {
+        this.work = work;
+    }
+
+    public HashSet<String> getHome() {
+        return home;
+    }
+
+    public void setHome(HashSet<String> home) {
+        this.home = home;
+    }
+
+    public HashSet<String> getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(HashSet<String> mobile) {
+        this.mobile = mobile;
     }
 }
