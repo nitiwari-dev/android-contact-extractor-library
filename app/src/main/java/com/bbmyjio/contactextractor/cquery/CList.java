@@ -27,6 +27,15 @@ public class CList {
     public CPostBoxCity cPostCode;
     public COrganisation cOrg;
     public CEvents cEvents;
+    public CGroups cGroups;
+
+    public CGroups getcGroups() {
+        return cGroups;
+    }
+
+    public void setcGroups(CGroups cGroups) {
+        this.cGroups = cGroups;
+    }
 
     public String getPhotoUri() {
         return photoUri;

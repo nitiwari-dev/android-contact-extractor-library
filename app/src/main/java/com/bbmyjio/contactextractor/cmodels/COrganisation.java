@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Contact Organization
+ *
  * Created by Nitesh on 19-04-2017.
  */
 
@@ -19,11 +21,22 @@ public class COrganisation {
     }
 
     public static class CompanyDepart {
-        public String company;
-        public String org;
+        private String company;
+        private String org;
 
-        public CompanyDepart(String company, String org) {
+        public String getCompany() {
+            return company;
+        }
+
+        public void setCompany(String company) {
             this.company = company;
+        }
+
+        public String getOrg() {
+            return org;
+        }
+
+        public void setOrg(String org) {
             this.org = org;
         }
     }

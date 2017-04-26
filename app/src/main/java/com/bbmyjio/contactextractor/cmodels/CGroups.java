@@ -1,6 +1,7 @@
 package com.bbmyjio.contactextractor.cmodels;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -8,18 +9,33 @@ import java.util.List;
  */
 
 public class CGroups {
-    List<BaseGroups> mList = new ArrayList<>();
+    private HashSet<BaseGroups> mList = new HashSet<>();
 
-    public CGroups(List<BaseGroups> mList) {
-        this.mList = new ArrayList<>(mList);
+    public HashSet<BaseGroups> getmList() {
+        return mList;
     }
 
-    public static class BaseGroups{
-        public int id;
-        public String title;
+    public void setmList(HashSet<BaseGroups> mList) {
+        this.mList = mList;
+    }
 
-        public BaseGroups(int id, String title) {
+    public static class BaseGroups {
+        private int id;
+        private String title;
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
             this.id = id;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
             this.title = title;
         }
     }

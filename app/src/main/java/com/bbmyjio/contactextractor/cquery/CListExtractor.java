@@ -94,8 +94,8 @@ public class CListExtractor extends BaseContactListEx {
                 break;
 
             case IContactQuery.Filter.ONLY_POSTCODE:
-                _id = fetchCursor.getString(fetchCursor.getColumnIndex(ContactsContract.RawContacts._ID));
-                contactId = fetchCursor.getString(fetchCursor.getColumnIndex(ContactsContract.RawContacts.CONTACT_ID));
+                _id = fetchCursor.getString(fetchCursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal._ID));
+                contactId = fetchCursor.getString(fetchCursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.CONTACT_ID));
                 break;
 
             case IContactQuery.Filter.ONLY_ORGANISATION:
@@ -106,6 +106,10 @@ public class CListExtractor extends BaseContactListEx {
             case IContactQuery.Filter.ONLY_EVENTS:
                 _id = fetchCursor.getString(fetchCursor.getColumnIndex(ContactsContract.CommonDataKinds.Event._ID));
                 contactId = fetchCursor.getString(fetchCursor.getColumnIndex(ContactsContract.CommonDataKinds.Event.CONTACT_ID));
+                break;
+            case IContactQuery.Filter.ONLY_GROUPS:
+                _id = fetchCursor.getString(fetchCursor.getColumnIndex(ContactsContract.CommonDataKinds.GroupMembership._ID));
+                contactId = fetchCursor.getString(fetchCursor.getColumnIndex(ContactsContract.CommonDataKinds.GroupMembership.CONTACT_ID));
                 break;
 
             default:

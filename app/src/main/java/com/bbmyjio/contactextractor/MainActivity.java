@@ -22,7 +22,12 @@ import android.widget.Toast;
 import com.bbmyjio.contactextractor.adapter.MyAdapter;
 import com.bbmyjio.contactextractor.cmodels.CAccount;
 import com.bbmyjio.contactextractor.cmodels.CEmail;
+import com.bbmyjio.contactextractor.cmodels.CEvents;
+import com.bbmyjio.contactextractor.cmodels.CGroups;
 import com.bbmyjio.contactextractor.cmodels.CName;
+import com.bbmyjio.contactextractor.cmodels.COrganisation;
+import com.bbmyjio.contactextractor.cmodels.CPostBoxCity;
+import com.bbmyjio.contactextractor.cmodels.ContactGenericType;
 import com.bbmyjio.contactextractor.cmodels.ItemData;
 import com.bbmyjio.contactextractor.common.permissions.RunTimePermissionWrapper;
 
@@ -92,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
     private void readAndFillContacts() {
 
         CQuery cQuery = CQuery.getInstance(this);
-        cQuery.filter(IContactQuery.Filter.ONLY_ACCOUNT);
+        cQuery.filter(IContactQuery.Filter.ONLY_GROUPS);
         cQuery.build(new ICCallback() {
             @Override
             public void onContactSuccess(List<CList> mList) {
@@ -101,17 +106,81 @@ public class MainActivity extends AppCompatActivity {
                 if (mList != null && !mList.isEmpty()) {
                     for (CList cList : mList) {
 
-                        CAccount cAccount = cList.getcAccount();
+                       /* CAccount cAccount = cList.getcAccount();
 
-                        if (cAccount != null){
-                            ItemData itemData = new ItemData(cList.contactId
-                                    + "" + "\n Home - " + TextUtils.join(",", cList.getcEmail().getHome())
-                                    + "\n Mobile " +
-                                    TextUtils.join(",", cList.getcEmail().getMobile())
-                                    + "\n Work - " + TextUtils.join(",", cList.getcEmail().getWork()) + "\n", uriToBitmapConverter(cList.getPhotoUri()));
+                        if (cAccount != null) {
+
+                            StringBuilder builder = new StringBuilder();
+                            for (ContactGenericType contactGenericType : cAccount.getmGenericType()) {
+                                builder.append("Name - " + contactGenericType.name).append("\n" + contactGenericType.type);
+                            }
+                            ItemData itemData = new ItemData("ContactId - " + cList.contactId + "\n" + builder.toString(), uriToBitmapConverter(cList.getPhotoUri()));
 
                             mListAdapter.add(itemData);
+
+                        }*/
+
+                        /*CPostBoxCity postBoxCity = cList.getcPostCode();
+
+                        if (postBoxCity != null) {
+
+                            StringBuilder builder = new StringBuilder();
+                            for (CPostBoxCity.PostCity postCity:postBoxCity.getmPostCity()){
+                                builder.append("City " + postCity.city).append(" Post "+postCity.post);
+                            }
+
+                            ItemData itemData = new ItemData("ContactId - " + cList.contactId + "\n" + builder.toString(), uriToBitmapConverter(cList.getPhotoUri()));
+
+                            mListAdapter.add(itemData);
+
+                        }*/
+
+                        /*COrganisation org = cList.getcOrg();
+
+                        if (org != null) {
+
+                            StringBuilder builder = new StringBuilder();
+                            for (COrganisation.CompanyDepart companyDepart:org.getCompanyOrgList()){
+                                builder.append("Company " + companyDepart.company).append(" Org "+companyDepart.org);
+                            }
+
+                            ItemData itemData = new ItemData("ContactId - " + cList.contactId + "\n" + builder.toString(), uriToBitmapConverter(cList.getPhotoUri()));
+
+                            mListAdapter.add(itemData);
+
+                        }*/
+
+
+                       /* CEvents events = cList.getcEvents();
+
+                        if (events != null) {
+
+                            StringBuilder builder = new StringBuilder();
+                            builder.append(events.getAnniversay() + "| Birthday |" + events.getBirthDay());
+                            ItemData itemData = new ItemData("ContactId - " + cList.contactId + "\n" + builder.toString(), uriToBitmapConverter(cList.getPhotoUri()));
+
+                            mListAdapter.add(itemData);
+
+                        }*/
+
+
+                        CGroups groups = cList.getcGroups();
+
+                        if (groups != null) {
+
+                            StringBuilder builder = new StringBuilder();
+
+                            for (CGroups.BaseGroups baseGroups : groups.getmList()) {
+                                builder.append("| BaseG |" + baseGroups.getTitle() + "||" + baseGroups.getId());
+
+                            }
+
+                            ItemData itemData = new ItemData("ContactId - " + cList.contactId + "\n" + builder.toString(), uriToBitmapConverter(cList.getPhotoUri()));
+
+                            mListAdapter.add(itemData);
+
                         }
+
 
                     }
                 }

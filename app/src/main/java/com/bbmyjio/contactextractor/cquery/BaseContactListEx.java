@@ -61,6 +61,9 @@ abstract class BaseContactListEx {
             case IContactQuery.Filter.ONLY_PHOTO_URI:
                 cList.setPhotoUri(icQuery.getPhotoUri());
                 break;
+            case IContactQuery.Filter.ONLY_GROUPS:
+                cList.setcGroups(icQuery.getGroups());
+                break;
             default:
                 break;
 
@@ -137,6 +140,16 @@ abstract class BaseContactListEx {
 
             case IContactQuery.Filter.ONLY_POSTCODE:
                 CONTENT_URI = ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI;
+                /*selection = ContactsContract.CommonDataKinds.StructuredPostal.POBOX
+                        + " != " + "\'\'"
+                        + " AND "
+                        + ContactsContract.CommonDataKinds.StructuredPostal.POBOX + " NOT NULL"
+                        + " AND "
+                        + ContactsContract.CommonDataKinds.StructuredPostal.POSTCODE
+                        + " != " + "\'\'"
+                        + " AND "
+                        + ContactsContract.CommonDataKinds.StructuredPostal.POSTCODE + " NOT NULL";*/
+
                 break;
 
             case IContactQuery.Filter.ONLY_ORGANISATION:

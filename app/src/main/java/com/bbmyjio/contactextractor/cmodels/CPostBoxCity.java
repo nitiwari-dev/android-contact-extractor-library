@@ -9,7 +9,7 @@ import java.util.List;
 
 public class CPostBoxCity {
 
-    private List<PostCity> mPostCity;
+    private List<PostCity> mPostCity = new ArrayList<>();
 
     public List<PostCity> getmPostCity() {
         return mPostCity;
@@ -23,12 +23,23 @@ public class CPostBoxCity {
         this.mPostCity = new ArrayList<>(mPostCity);
     }
 
-    public static class PostCity{
-        public String post;
-        public String city;
+    public static class PostCity {
+        private String post;
+        private String city;
 
-        public PostCity(String post, String city) {
+        public String getPost() {
+            return post;
+        }
+
+        public void setPost(String post) {
             this.post = post;
+        }
+
+        public String getCity() {
+            return city;
+        }
+
+        public void setCity(String city) {
             this.city = city;
         }
     }

@@ -1,10 +1,8 @@
 package com.bbmyjio.contactextractor.cquery;
 
 import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
 import android.provider.ContactsContract;
 import android.util.Log;
 
@@ -321,7 +319,7 @@ public class BaseContactQuery implements IContactQuery {
 
         CPostBoxCity cPostBoxCityList = cList.getcPostCode();
 
-        if (cPostBoxCityList != null) {
+        if (cPostBoxCityList == null) {
             cPostBoxCityList = new CPostBoxCity();
         }
 
@@ -334,7 +332,12 @@ public class BaseContactQuery implements IContactQuery {
         String city = cursor.getString(
                 cursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.CITY));
 
-        cPostCode.add(new CPostBoxCity.PostCity(poBox, city));
+        Log.d(TAG, "|Pobox" + poBox + "|City|" + city);
+        CPostBoxCity.PostCity postCity = new CPostBoxCity.PostCity();
+        postCity.setCity(city);
+        postCity.setPost(poBox);
+
+        cPostCode.add(postCity);
         cPostBoxCityList.setmPostCity(cPostCode);
 
         return cPostBoxCityList;
@@ -421,14 +424,14 @@ public class BaseContactQuery implements IContactQuery {
         if (cOrganisation == null)
             cOrganisation = new COrganisation();
 
-
         List<COrganisation.CompanyDepart> companyDeparts = cOrganisation.getCompanyOrgList();
 
+        COrganisation.CompanyDepart depart = new COrganisation.CompanyDepart();
+        depart.setCompany(cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Organization.COMPANY)));
+        depart.setOrg(cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Organization.DEPARTMENT)));
 
-        String company = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Organization.COMPANY));
-        String department = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Organization.DEPARTMENT));
 
-        companyDeparts.add(new COrganisation.CompanyDepart(company, department));
+        companyDeparts.add(depart);
 
         cOrganisation.setCompanyOrgList(companyDeparts);
 
@@ -504,7 +507,7 @@ public class BaseContactQuery implements IContactQuery {
 
     @Override
     public CGroups getGroups() {
-        String WHERE = ContactsContract.Data.MIMETYPE + " = ? and " + ContactsContract.Data.CONTACT_ID + "= ?";
+     /*   String WHERE = ContactsContract.Data.MIMETYPE + " = ? and " + ContactsContract.Data.CONTACT_ID + "= ?";
         String[] WHERE_ARGS = new String[]{ContactsContract.CommonDataKinds.GroupMembership.CONTENT_ITEM_TYPE, identity};
         String[] PROJECTIONS = new String[]{ContactsContract.Groups._ID, ContactsContract.CommonDataKinds.GroupMembership.DISPLAY_NAME};
 
@@ -517,19 +520,35 @@ public class BaseContactQuery implements IContactQuery {
             List<CGroups.BaseGroups> baseGroupsList = new ArrayList<>();
 
             while (groups_cursor.moveToNext()) {
-                int id = groups_cursor.getInt(groups_cursor.getColumnIndex(ContactsContract.Groups._ID));
-                String title = groups_cursor.getString(groups_cursor.getColumnIndex(ContactsContract.CommonDataKinds.GroupMembership.DISPLAY_NAME));
-
-                baseGroupsList.add(new CGroups.BaseGroups(id, title));
+                //int id = ;
+                //String title =
+                CGroups.BaseGroups baseGroups = new CGroups.BaseGroups();
+                baseGroups.setId(groups_cursor.getInt(groups_cursor.getColumnIndex(ContactsContract.Groups._ID)));
+                baseGroups.setTitle(groups_cursor.getString(groups_cursor.getColumnIndex(ContactsContract.CommonDataKinds.GroupMembership.DISPLAY_NAME)));
+                baseGroupsList.add(baseGroups);
             }
 
-            groups_cursor.close();
+            CGroups cGroups = new CGroups();
+            cGroups.setmList(baseGroupsList);
+            return cGroups;
 
-            return new CGroups(baseGroupsList);
+        }*/
 
-        }
+        CGroups cGroups = cList.getcGroups();
 
-        return null;
+        if (cGroups == null)
+            cGroups = new CGroups();
+
+        HashSet<CGroups.BaseGroups> baseGroupsList = cGroups.getmList();
+
+        CGroups.BaseGroups baseGroups = new CGroups.BaseGroups();
+        baseGroups.setId(cursor.getInt(cursor.getColumnIndex(ContactsContract.Groups._ID)));
+        baseGroups.setTitle(cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.GroupMembership.DISPLAY_NAME)));
+        baseGroupsList.add(baseGroups);
+
+        cGroups.setmList(baseGroupsList);
+        return cGroups;
+
     }
 
     @Override
