@@ -543,7 +543,7 @@ public class BaseContactQuery implements IContactQuery {
 
         CGroups.BaseGroups baseGroups = new CGroups.BaseGroups();
         baseGroups.setId(cursor.getInt(cursor.getColumnIndex(ContactsContract.Groups._ID)));
-        baseGroups.setTitle(cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.GroupMembership.DISPLAY_NAME)));
+        baseGroups.setTitle(cursor.getString(cursor.getColumnIndex(ContactsContract.Groups.TITLE)));
         baseGroupsList.add(baseGroups);
 
         cGroups.setmList(baseGroupsList);

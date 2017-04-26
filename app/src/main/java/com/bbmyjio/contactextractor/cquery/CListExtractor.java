@@ -108,8 +108,8 @@ public class CListExtractor extends BaseContactListEx {
                 contactId = fetchCursor.getString(fetchCursor.getColumnIndex(ContactsContract.CommonDataKinds.Event.CONTACT_ID));
                 break;
             case IContactQuery.Filter.ONLY_GROUPS:
-                _id = fetchCursor.getString(fetchCursor.getColumnIndex(ContactsContract.CommonDataKinds.GroupMembership._ID));
-                contactId = fetchCursor.getString(fetchCursor.getColumnIndex(ContactsContract.CommonDataKinds.GroupMembership.CONTACT_ID));
+                _id = fetchCursor.getString(fetchCursor.getColumnIndex(ContactsContract.Groups._ID));
+                contactId = _id;
                 break;
 
             default:

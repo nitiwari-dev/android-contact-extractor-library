@@ -172,7 +172,6 @@ public class MainActivity extends AppCompatActivity {
 
                             for (CGroups.BaseGroups baseGroups : groups.getmList()) {
                                 builder.append("| BaseG |" + baseGroups.getTitle() + "||" + baseGroups.getId());
-
                             }
 
                             ItemData itemData = new ItemData("ContactId - " + cList.contactId + "\n" + builder.toString(), uriToBitmapConverter(cList.getPhotoUri()));

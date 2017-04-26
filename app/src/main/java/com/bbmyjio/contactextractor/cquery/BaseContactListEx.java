@@ -165,6 +165,10 @@ abstract class BaseContactListEx {
                 selectionArgs = new String[]{
                         ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE};
                 break;
+
+            case IContactQuery.Filter.ONLY_GROUPS:
+                CONTENT_URI = ContactsContract.Groups.CONTENT_URI;
+                break;
         }
 
         if (CONTENT_URI == null)
