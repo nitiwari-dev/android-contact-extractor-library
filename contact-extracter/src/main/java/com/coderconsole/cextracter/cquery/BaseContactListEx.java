@@ -8,6 +8,7 @@ import android.text.TextUtils;
 
 import com.coderconsole.cextracter.cquery.base.CList;
 import com.coderconsole.cextracter.cquery.common.CommonCList;
+import com.coderconsole.cextracter.i.ICFilter;
 import com.coderconsole.cextracter.i.IContactQuery;
 
 
@@ -30,31 +31,31 @@ public abstract class BaseContactListEx {
     protected CList queryFilterType(IContactQuery icQuery, int mFilterType, CList cList) {
 
         switch (mFilterType) {
-            case IContactQuery.Filter.ONLY_ACCOUNT:
+            case ICFilter.ONLY_ACCOUNT:
                 cList.setcAccount(icQuery.getAccount());
                 break;
-            case IContactQuery.Filter.ONLY_EMAIL:
+            case ICFilter.ONLY_EMAIL:
                 cList.setcEmail(icQuery.getEmail());
                 break;
-            case IContactQuery.Filter.ONLY_PHONE:
+            case ICFilter.ONLY_PHONE:
                 cList.setcPhone(icQuery.getPhone());
                 break;
-            case IContactQuery.Filter.ONLY_NAME:
+            case ICFilter.ONLY_NAME:
                 cList.setcName(icQuery.getName());
                 break;
-            case IContactQuery.Filter.ONLY_EVENTS:
+            case ICFilter.ONLY_EVENTS:
                 cList.setcEvents(icQuery.getEvents());
                 break;
-            case IContactQuery.Filter.ONLY_ORGANISATION:
+            case ICFilter.ONLY_ORGANISATION:
                 cList.setcOrg(icQuery.getOrg());
                 break;
-            case IContactQuery.Filter.ONLY_POSTCODE:
+            case ICFilter.ONLY_POSTCODE:
                 cList.setcPostCode(icQuery.getPostCode());
                 break;
-            case IContactQuery.Filter.ONLY_PHOTO_URI:
+            case ICFilter.ONLY_PHOTO_URI:
                 cList.setPhotoUri(icQuery.getPhotoUri());
                 break;
-            case IContactQuery.Filter.ONLY_GROUPS:
+            case ICFilter.ONLY_GROUPS:
                 cList.setcGroups(icQuery.getGroups());
                 break;
             default:
@@ -68,7 +69,7 @@ public abstract class BaseContactListEx {
     protected CommonCList queryFilterType(ICommonCQuery icQuery, int mFilterType, CommonCList cList) {
 
         switch (mFilterType) {
-            case IContactQuery.Filter.COMMON:
+            case ICFilter.COMMON:
                 cList.setcPhone(icQuery.getPhone());
                 cList.setDisplayName(icQuery.getName());
                 cList.setPhotoUri(icQuery.getPhotoUri());
@@ -101,46 +102,46 @@ public abstract class BaseContactListEx {
         String orderBy = null;
 
         switch (type) {
-            case IContactQuery.Filter.COMMON:
+            case ICFilter.COMMON:
                 CONTENT_URI = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
                 break;
-            case IContactQuery.Filter.ONLY_EMAIL:
+            case ICFilter.ONLY_EMAIL:
                 CONTENT_URI = ContactsContract.CommonDataKinds.Email.CONTENT_URI;
                 orderBy = ContactsContract.CommonDataKinds.Email.DATA;
                 selection = ContactsContract.CommonDataKinds.Email.DATA + " != " + "\'\' AND " + ContactsContract.CommonDataKinds.Email.DATA + " NOT NULL";
                 break;
-            case IContactQuery.Filter.ONLY_NAME:
+            case ICFilter.ONLY_NAME:
                 CONTENT_URI = ContactsContract.Data.CONTENT_URI;
                 selection = ContactsContract.Data.MIMETYPE + " = ?";
                 selectionArgs = new String[]{ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE};
                 orderBy = ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME;
                 break;
 
-            case IContactQuery.Filter.ONLY_ACCOUNT:
+            case ICFilter.ONLY_ACCOUNT:
                 CONTENT_URI = ContactsContract.RawContacts.CONTENT_URI;
                 orderBy = ContactsContract.RawContacts.CONTACT_ID;
                 break;
 
-            case IContactQuery.Filter.ONLY_POSTCODE:
+            case ICFilter.ONLY_POSTCODE:
                 CONTENT_URI = ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI;
 
                 break;
 
-            case IContactQuery.Filter.ONLY_ORGANISATION:
+            case ICFilter.ONLY_ORGANISATION:
                 CONTENT_URI = ContactsContract.Data.CONTENT_URI;
                 selection = ContactsContract.Data.MIMETYPE + " = ?";
                 selectionArgs = new String[]{
                         ContactsContract.CommonDataKinds.Organization.CONTENT_ITEM_TYPE};
                 break;
 
-            case IContactQuery.Filter.ONLY_EVENTS:
+            case ICFilter.ONLY_EVENTS:
                 CONTENT_URI = ContactsContract.Data.CONTENT_URI;
                 selection = ContactsContract.Data.MIMETYPE + " = ?";
                 selectionArgs = new String[]{
                         ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE};
                 break;
 
-            case IContactQuery.Filter.ONLY_GROUPS:
+            case ICFilter.ONLY_GROUPS:
                 CONTENT_URI = ContactsContract.Groups.CONTENT_URI;
                 break;
         }

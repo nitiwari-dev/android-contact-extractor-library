@@ -6,6 +6,7 @@ import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.coderconsole.cextracter.cquery.BaseContactListEx;
+import com.coderconsole.cextracter.i.ICFilter;
 import com.coderconsole.cextracter.i.IContactQuery;
 
 import java.util.ArrayList;
@@ -76,41 +77,41 @@ public class CListExtractor extends BaseContactListEx {
         String contactId = null;
 
         switch (mFilterType) {
-            case IContactQuery.Filter.ONLY_NAME:
+            case ICFilter.ONLY_NAME:
                 _id = fetchCursor.getString(fetchCursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName._ID));
                 contactId = fetchCursor.getString(fetchCursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.CONTACT_ID));
                 break;
 
-            case IContactQuery.Filter.ONLY_EMAIL:
+            case ICFilter.ONLY_EMAIL:
                 _id = fetchCursor.getString(fetchCursor.getColumnIndex(ContactsContract.CommonDataKinds.Email._ID));
                 contactId = fetchCursor.getString(fetchCursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.CONTACT_ID));
                 break;
 
-            case IContactQuery.Filter.ONLY_PHONE:
+            case ICFilter.ONLY_PHONE:
                 _id = fetchCursor.getString(fetchCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone._ID));
                 contactId = fetchCursor.getString(fetchCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
                 break;
 
-            case IContactQuery.Filter.ONLY_ACCOUNT:
+            case ICFilter.ONLY_ACCOUNT:
                 _id = fetchCursor.getString(fetchCursor.getColumnIndex(ContactsContract.RawContacts._ID));
                 contactId = fetchCursor.getString(fetchCursor.getColumnIndex(ContactsContract.RawContacts.CONTACT_ID));
                 break;
 
-            case IContactQuery.Filter.ONLY_POSTCODE:
+            case ICFilter.ONLY_POSTCODE:
                 _id = fetchCursor.getString(fetchCursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal._ID));
                 contactId = fetchCursor.getString(fetchCursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.CONTACT_ID));
                 break;
 
-            case IContactQuery.Filter.ONLY_ORGANISATION:
+            case ICFilter.ONLY_ORGANISATION:
                 _id = fetchCursor.getString(fetchCursor.getColumnIndex(ContactsContract.CommonDataKinds.Organization._ID));
                 contactId = fetchCursor.getString(fetchCursor.getColumnIndex(ContactsContract.CommonDataKinds.Organization.CONTACT_ID));
                 break;
 
-            case IContactQuery.Filter.ONLY_EVENTS:
+            case ICFilter.ONLY_EVENTS:
                 _id = fetchCursor.getString(fetchCursor.getColumnIndex(ContactsContract.CommonDataKinds.Event._ID));
                 contactId = fetchCursor.getString(fetchCursor.getColumnIndex(ContactsContract.CommonDataKinds.Event.CONTACT_ID));
                 break;
-            case IContactQuery.Filter.ONLY_GROUPS:
+            case ICFilter.ONLY_GROUPS:
                 _id = fetchCursor.getString(fetchCursor.getColumnIndex(ContactsContract.Groups._ID));
                 contactId = _id;
                 break;
