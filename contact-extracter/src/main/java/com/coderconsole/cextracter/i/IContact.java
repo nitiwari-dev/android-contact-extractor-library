@@ -1,7 +1,7 @@
-package com.coderconsole.cextracter.cmodels.i;
+package com.coderconsole.cextracter.i;
 
 
-import com.coderconsole.cextracter.cmodels.cquery.CList;
+import com.coderconsole.cextracter.cquery.base.CList;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import java.util.List;
  * Created by Nitesh on 03-04-2017.
  */
 
-public interface ICCallback {
+public interface IContact {
     void onContactSuccess(List<CList> mList);
     void onContactError(Throwable throwable);
 }

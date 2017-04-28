@@ -1,4 +1,4 @@
-package com.coderconsole.cextracter.cmodels.cquery;
+package com.coderconsole.cextracter.cquery.common;
 
 
 import com.coderconsole.cextracter.cmodels.CPhone;
@@ -7,7 +7,7 @@ import com.coderconsole.cextracter.cmodels.CPhone;
  * Created by Nitesh on 22-04-2017.
  */
 
-public class GenericCList {
+public class CommonCList {
 
     private String _id;
     private String contactId;

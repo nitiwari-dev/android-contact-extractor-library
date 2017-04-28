@@ -1,6 +1,8 @@
 package com.coderconsole.cextracter.cmodels;
 
 /**
+ * Contacts Events Information
+ *
  * Created by Nitesh on 19-04-2017.
  */
 

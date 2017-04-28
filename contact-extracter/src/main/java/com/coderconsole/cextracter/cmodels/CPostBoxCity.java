@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Contact Post and City Information
+ *
  * Created by Nitesh on 19-04-2017.
  */
 

@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bbmyjio.contactextractor.R;
-import com.coderconsole.cextracter.cmodels.ItemData;
 
 import java.util.List;
 

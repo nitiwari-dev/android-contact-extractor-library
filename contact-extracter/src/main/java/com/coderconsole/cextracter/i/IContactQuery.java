@@ -1,4 +1,4 @@
-package com.coderconsole.cextracter.cmodels.i;
+package com.coderconsole.cextracter.i;
 
 import com.coderconsole.cextracter.cmodels.CAccount;
 import com.coderconsole.cextracter.cmodels.CEmail;

@@ -1,6 +1,8 @@
 package com.coderconsole.cextracter.cmodels;
 
 /**
+ * Contact Generic Type with name and its type
+ *
  * Created by Nitesh on 19-04-2017.
  */
 

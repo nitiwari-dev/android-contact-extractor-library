@@ -1,11 +1,12 @@
-package com.coderconsole.cextracter.cmodels.cquery;
+package com.coderconsole.cextracter.cquery.base;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.util.Log;
 
-import com.coderconsole.cextracter.cmodels.i.IContactQuery;
+import com.coderconsole.cextracter.cquery.BaseContactListEx;
+import com.coderconsole.cextracter.i.IContactQuery;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,6 +19,8 @@ import io.reactivex.SingleEmitter;
 import io.reactivex.SingleOnSubscribe;
 
 /**
+ * Contact List Extractor
+ *
  * Created by Nitesh on 25-04-2017.
  */
 
@@ -32,7 +35,7 @@ public class CListExtractor extends BaseContactListEx {
     }
 
 
-    Single<List<CList>> getList(final int mFilterType, final String orderBy, final String limit, final String skip) {
+    public Single<List<CList>> getList(final int mFilterType, final String orderBy, final String limit, final String skip) {
 
         return Single.create(new SingleOnSubscribe<List<CList>>() {
             @Override
@@ -125,7 +128,7 @@ public class CListExtractor extends BaseContactListEx {
             cList.setContactId(contactId);
         }
 
-        IContactQuery iContactQuery = new BaseContactQuery(mContext, fetchCursor, cList, null);
+        IContactQuery iContactQuery = new BaseContactQueryCB(mContext, fetchCursor, cList, null);
         cList = queryFilterType(iContactQuery, mFilterType, cList);
 
         cListMap.put(contactId, cList);

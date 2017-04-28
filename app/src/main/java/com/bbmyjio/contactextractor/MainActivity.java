@@ -21,12 +21,12 @@ import android.widget.Toast;
 import com.bbmyjio.contactextractor.adapter.MyAdapter;
 import com.bbmyjio.contactextractor.common.permissions.RunTimePermissionWrapper;
 import com.coderconsole.cextracter.cmodels.CGroups;
-import com.coderconsole.cextracter.cmodels.ItemData;
-import com.coderconsole.cextracter.cmodels.cquery.CList;
-import com.coderconsole.cextracter.cmodels.cquery.CQuery;
-import com.coderconsole.cextracter.cmodels.cquery.GenericCList;
-import com.coderconsole.cextracter.cmodels.i.ICCallback;
-import com.coderconsole.cextracter.cmodels.i.IContactQuery;
+import com.bbmyjio.contactextractor.adapter.ItemData;
+import com.coderconsole.cextracter.cquery.base.CList;
+import com.coderconsole.cextracter.cquery.CQuery;
+import com.coderconsole.cextracter.cquery.common.CommonCList;
+import com.coderconsole.cextracter.i.IContact;
+import com.coderconsole.cextracter.i.IContactQuery;
 
 
 import java.io.FileNotFoundException;
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
         CQuery cQuery = CQuery.getInstance(this);
         cQuery.filter(IContactQuery.Filter.ONLY_GROUPS);
-        cQuery.build(new ICCallback() {
+        cQuery.build(new IContact() {
             @Override
             public void onContactSuccess(List<CList> mList) {
                 List<ItemData> mListAdapter = new ArrayList<>();
@@ -329,14 +329,14 @@ public class MainActivity extends AppCompatActivity {
         if (fetchCursor == null || fetchCursor.getCount() == 0)
             return;
 
-        Map<String, GenericCList> cListMap = new HashMap<>();
+        Map<String, CommonCList> cListMap = new HashMap<>();
 
         while (fetchCursor.moveToNext()) {
 
             String id = fetchCursor.getString(fetchCursor.getColumnIndex(ContactsContract.Contacts._ID));
             String contactId = fetchCursor.getString(fetchCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
 
-            GenericCList genericCList = new GenericCList();
+            CommonCList commonCList = new CommonCList();
 
            /* IGenericQuery iGenericQuery = new BaseGenericCQuery(fetchCursor, cListMap, id, contactId);
 
@@ -349,17 +349,17 @@ public class MainActivity extends AppCompatActivity {
             cListMap.put(contactId, genericCList);*/
         }
 
-        ArrayList<GenericCList> genericCLists = new ArrayList<>(cListMap.values());
+        ArrayList<CommonCList> commonCLists = new ArrayList<>(cListMap.values());
 
-        for (GenericCList genericCList : genericCLists) {
-            ItemData itemData = new ItemData(genericCList.getDisplayName() + "" + "\n Home - " + TextUtils.join(",", genericCList.getcPhone().getHome()) + "\n Mobile " +
-                    TextUtils.join(",", genericCList.getcPhone().getMobile()) + "\n Work - " + TextUtils.join(",", genericCList.getcPhone().getWork()) + "\n", null);
+        for (CommonCList commonCList : commonCLists) {
+            ItemData itemData = new ItemData(commonCList.getDisplayName() + "" + "\n Home - " + TextUtils.join(",", commonCList.getcPhone().getHome()) + "\n Mobile " +
+                    TextUtils.join(",", commonCList.getcPhone().getMobile()) + "\n Work - " + TextUtils.join(",", commonCList.getcPhone().getWork()) + "\n", null);
 
             mListAdapter.add(itemData);
 
         }
 
-        Toast.makeText(this, " total contact count " + genericCLists.size(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, " total contact count " + commonCLists.size(), Toast.LENGTH_SHORT).show();
 
 
         MyAdapter mAdapter = new MyAdapter(mListAdapter);

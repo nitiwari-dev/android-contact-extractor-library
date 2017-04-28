@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Contact Organization
+ * Contact Organization Information with Company and Department
  *
  * Created by Nitesh on 19-04-2017.
  */

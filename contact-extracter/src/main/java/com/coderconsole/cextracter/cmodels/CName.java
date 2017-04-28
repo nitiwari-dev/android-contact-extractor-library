@@ -1,6 +1,8 @@
 package com.coderconsole.cextracter.cmodels;
 
 /**
+ * Contact Name Information
+ *
  * Created by Nitesh on 18-04-2017.
  */
 

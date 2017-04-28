@@ -3,6 +3,8 @@ package com.coderconsole.cextracter.cmodels;
 import java.util.HashSet;
 
 /**
+ * Contacts Groups Information
+ *
  * Created by Nitesh on 19-04-2017.
  */
 

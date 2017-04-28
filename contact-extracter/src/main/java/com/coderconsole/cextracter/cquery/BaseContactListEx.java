@@ -1,4 +1,4 @@
-package com.coderconsole.cextracter.cmodels.cquery;
+package com.coderconsole.cextracter.cquery;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -6,14 +6,18 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
 
-import com.coderconsole.cextracter.cmodels.i.IContactQuery;
+import com.coderconsole.cextracter.cquery.base.CList;
+import com.coderconsole.cextracter.cquery.common.CommonCList;
+import com.coderconsole.cextracter.i.IContactQuery;
 
 
 /**
+ * BaseContact List Extracter
+ *
  * Created by Nitesh on 22-04-2017.
  */
 
-abstract class BaseContactListEx {
+public abstract class BaseContactListEx {
 
     private Context mContext;
 
@@ -22,18 +26,6 @@ abstract class BaseContactListEx {
     }
 
     private static final String TAG = BaseContactListEx.class.getSimpleName();
-
-    /*protected CList fetchAll(IContactQuery icQuery, CList cList) {
-        cList.setcAccount(icQuery.getAccount());
-        cList.setcEmail(icQuery.getEmail());
-        cList.setcPhone(icQuery.getPhone());
-        cList.setcName(icQuery.getName());
-        cList.setcEvents(icQuery.getEvents());
-        cList.setcOrg(icQuery.getOrg());
-        cList.setcPostCode(icQuery.getPostCode());
-        cList.setPhotoUri(icQuery.getPhotoUri());
-        return cList;
-    }*/
 
     protected CList queryFilterType(IContactQuery icQuery, int mFilterType, CList cList) {
 
@@ -73,7 +65,7 @@ abstract class BaseContactListEx {
         return cList;
     }
 
-    protected GenericCList queryFilterType(IGenericQuery icQuery, int mFilterType, GenericCList cList) {
+    protected CommonCList queryFilterType(ICommonCQuery icQuery, int mFilterType, CommonCList cList) {
 
         switch (mFilterType) {
             case IContactQuery.Filter.COMMON:
@@ -97,16 +89,6 @@ abstract class BaseContactListEx {
         sBuilder.append(!TextUtils.isEmpty(skip) && TextUtils.isDigitsOnly(skip) ? " offset " + skip + " " : " ");
 
         return sBuilder.toString();
-    }
-
-
-    protected String[] projections() {
-
-        String[] projections = new String[]{ContactsContract.Contacts.DISPLAY_NAME,
-                ContactsContract.Contacts._ID,
-                ContactsContract.Contacts.HAS_PHONE_NUMBER};
-
-        return projections;
     }
 
 
@@ -141,15 +123,6 @@ abstract class BaseContactListEx {
 
             case IContactQuery.Filter.ONLY_POSTCODE:
                 CONTENT_URI = ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI;
-                /*selection = ContactsContract.CommonDataKinds.StructuredPostal.POBOX
-                        + " != " + "\'\'"
-                        + " AND "
-                        + ContactsContract.CommonDataKinds.StructuredPostal.POBOX + " NOT NULL"
-                        + " AND "
-                        + ContactsContract.CommonDataKinds.StructuredPostal.POSTCODE
-                        + " != " + "\'\'"
-                        + " AND "
-                        + ContactsContract.CommonDataKinds.StructuredPostal.POSTCODE + " NOT NULL";*/
 
                 break;
 

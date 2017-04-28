@@ -1,10 +1,14 @@
-package com.coderconsole.cextracter.cmodels.cquery;
+package com.coderconsole.cextracter.cquery;
 
 import android.content.Context;
 
-import com.coderconsole.cextracter.cmodels.common.permissions.PermissionWrapper;
-import com.coderconsole.cextracter.cmodels.i.ICCallback;
-import com.coderconsole.cextracter.cmodels.i.IGenericCallback;
+import com.coderconsole.cextracter.common.permissions.PermissionWrapper;
+import com.coderconsole.cextracter.cquery.base.CList;
+import com.coderconsole.cextracter.cquery.base.CListExtractor;
+import com.coderconsole.cextracter.cquery.common.CommonCList;
+import com.coderconsole.cextracter.cquery.common.CommonCListExtracter;
+import com.coderconsole.cextracter.i.IContact;
+import com.coderconsole.cextracter.i.ICommonContact;
 
 import java.util.List;
 
@@ -58,7 +62,7 @@ public class CQuery {
         return cQuery;
     }
 
-    public void build(final ICCallback iContact) {
+    public void build(final IContact iContact) {
 
        if (!PermissionWrapper.hasContactsPermissions(mContext)) {
             throw new SecurityException("Contact Permission Missing");
@@ -79,7 +83,7 @@ public class CQuery {
                 });
     }
 
-    public void build(final IGenericCallback iGenericQuery) {
+    public void build(final ICommonContact iGenericQuery) {
         if (!PermissionWrapper.hasContactsPermissions(mContext)) {
             throw new SecurityException("Contact Permission Missing");
         }
@@ -88,9 +92,9 @@ public class CQuery {
         new CommonCListExtracter(mContext).getList(mListFilterType, orderBy, limit, skip)
                 .subscribeOn(new IoScheduler())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BiConsumerSingleObserver<>(new BiConsumer<List<GenericCList>, Throwable>() {
+                .subscribe(new BiConsumerSingleObserver<>(new BiConsumer<List<CommonCList>, Throwable>() {
                     @Override
-                    public void accept(List<GenericCList> cLists, Throwable throwable) throws Exception {
+                    public void accept(List<CommonCList> cLists, Throwable throwable) throws Exception {
                         if (iGenericQuery == null)
                             return;
 

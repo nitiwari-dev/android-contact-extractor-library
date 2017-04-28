@@ -1,9 +1,10 @@
-package com.coderconsole.cextracter.cmodels.cquery;
+package com.coderconsole.cextracter.cquery.common;
 
 import android.database.Cursor;
 import android.provider.ContactsContract;
 
 import com.coderconsole.cextracter.cmodels.CPhone;
+import com.coderconsole.cextracter.cquery.ICommonCQuery;
 
 import java.util.HashSet;
 
@@ -11,7 +12,7 @@ import java.util.HashSet;
  * Created by Nitesh on 24-04-2017.
  */
 
-public class BaseGenericCQuery implements IGenericQuery {
+public class BaseCommonCCQuery implements ICommonCQuery {
 
     private Cursor fetchCursor;
 
@@ -19,10 +20,10 @@ public class BaseGenericCQuery implements IGenericQuery {
 
     private String contactId;
 
-    private GenericCList genericContact;
+    private CommonCList genericContact;
 
 
-    public BaseGenericCQuery(Cursor fetchCursor, GenericCList cListMap, String _id, String contactId) {
+    public BaseCommonCCQuery(Cursor fetchCursor, CommonCList cListMap, String _id, String contactId) {
         this.fetchCursor = fetchCursor;
         this._id = _id;
         this.contactId = contactId;

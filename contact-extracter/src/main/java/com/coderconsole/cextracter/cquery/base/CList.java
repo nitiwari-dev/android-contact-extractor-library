@@ -1,4 +1,4 @@
-package com.coderconsole.cextracter.cmodels.cquery;
+package com.coderconsole.cextracter.cquery.base;
 
 
 import com.coderconsole.cextracter.cmodels.CAccount;
