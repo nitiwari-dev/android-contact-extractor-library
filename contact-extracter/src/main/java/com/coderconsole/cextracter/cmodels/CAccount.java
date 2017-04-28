@@ -1,6 +1,4 @@
-package com.bbmyjio.contactextractor.cmodels;
-
-import com.bbmyjio.contactextractor.cmodels.ContactGenericType;
+package com.coderconsole.cextracter.cmodels;
 
 import java.util.ArrayList;
 import java.util.List;

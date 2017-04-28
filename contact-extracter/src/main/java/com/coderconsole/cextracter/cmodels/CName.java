@@ -1,4 +1,4 @@
-package com.bbmyjio.contactextractor.cmodels;
+package com.coderconsole.cextracter.cmodels;
 
 /**
  * Created by Nitesh on 18-04-2017.

@@ -1,4 +1,4 @@
-package com.bbmyjio.contactextractor.cmodels;
+package com.coderconsole.cextracter.cmodels;
 
 import java.util.ArrayList;
 import java.util.List;

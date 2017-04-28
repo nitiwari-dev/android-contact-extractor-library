@@ -1,8 +1,6 @@
-package com.bbmyjio.contactextractor.cmodels;
+package com.coderconsole.cextracter.cmodels;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
 /**
  * Created by Nitesh on 19-04-2017.

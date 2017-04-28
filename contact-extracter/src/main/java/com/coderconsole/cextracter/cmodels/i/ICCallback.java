@@ -1,6 +1,7 @@
-package com.bbmyjio.contactextractor.i;
+package com.coderconsole.cextracter.cmodels.i;
 
-import com.bbmyjio.contactextractor.cquery.CList;
+
+import com.coderconsole.cextracter.cmodels.cquery.CList;
 
 import java.util.List;
 

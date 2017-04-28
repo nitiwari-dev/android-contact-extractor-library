@@ -1,9 +1,9 @@
-package com.bbmyjio.contactextractor.cquery;
+package com.coderconsole.cextracter.cmodels.cquery;
 
 import android.database.Cursor;
 import android.provider.ContactsContract;
 
-import com.bbmyjio.contactextractor.contacts.model.api.CPhone;
+import com.coderconsole.cextracter.cmodels.CPhone;
 
 import java.util.HashSet;
 

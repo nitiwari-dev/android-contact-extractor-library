@@ -15,21 +15,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.bbmyjio.contactextractor.adapter.MyAdapter;
-import com.bbmyjio.contactextractor.cmodels.CAccount;
-import com.bbmyjio.contactextractor.cmodels.CEmail;
-import com.bbmyjio.contactextractor.cmodels.CEvents;
-import com.bbmyjio.contactextractor.cmodels.CGroups;
-import com.bbmyjio.contactextractor.cmodels.CName;
-import com.bbmyjio.contactextractor.cmodels.COrganisation;
-import com.bbmyjio.contactextractor.cmodels.CPostBoxCity;
-import com.bbmyjio.contactextractor.cmodels.ContactGenericType;
-import com.bbmyjio.contactextractor.cmodels.ItemData;
 import com.bbmyjio.contactextractor.common.permissions.RunTimePermissionWrapper;
+import com.coderconsole.cextracter.cmodels.CGroups;
+import com.coderconsole.cextracter.cmodels.ItemData;
+import com.coderconsole.cextracter.cmodels.cquery.CList;
+import com.coderconsole.cextracter.cmodels.cquery.CQuery;
+import com.coderconsole.cextracter.cmodels.cquery.GenericCList;
+import com.coderconsole.cextracter.cmodels.i.ICCallback;
+import com.coderconsole.cextracter.cmodels.i.IContactQuery;
+
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -37,13 +35,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.bbmyjio.contactextractor.cquery.CList;
-import com.bbmyjio.contactextractor.cquery.CQuery;
-import com.bbmyjio.contactextractor.cquery.GenericCList;
-import com.bbmyjio.contactextractor.i.ICCallback;
-import com.bbmyjio.contactextractor.i.IContactQuery;
-import com.bbmyjio.contactextractor.i.IGenericCallback;
 
 public class MainActivity extends AppCompatActivity {
 

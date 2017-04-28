@@ -1,13 +1,12 @@
-package com.bbmyjio.contactextractor.cquery;
+package com.coderconsole.cextracter.cmodels.cquery;
 
 import android.content.Context;
 
-import com.bbmyjio.contactextractor.common.permissions.PermissionWrapper;
+import com.coderconsole.cextracter.cmodels.common.permissions.PermissionWrapper;
+import com.coderconsole.cextracter.cmodels.i.ICCallback;
+import com.coderconsole.cextracter.cmodels.i.IGenericCallback;
 
 import java.util.List;
-
-import com.bbmyjio.contactextractor.i.ICCallback;
-import com.bbmyjio.contactextractor.i.IGenericCallback;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.BiConsumer;

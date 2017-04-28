@@ -1,4 +1,4 @@
-package com.bbmyjio.contactextractor.cmodels;
+package com.coderconsole.cextracter.cmodels;
 
 import android.graphics.Bitmap;
 

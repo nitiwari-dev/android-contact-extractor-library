@@ -1,8 +1,6 @@
 package com.bbmyjio.contactextractor.adapter;
 
 import android.graphics.Bitmap;
-import android.net.Uri;
-import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,9 +9,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bbmyjio.contactextractor.R;
-import com.bbmyjio.contactextractor.cmodels.ItemData;
+import com.coderconsole.cextracter.cmodels.ItemData;
 
 import java.util.List;
+
 
 /**
  * Created by Nitesh on 21-04-2017.

@@ -1,4 +1,4 @@
-package com.bbmyjio.contactextractor.cquery;
+package com.coderconsole.cextracter.cmodels.cquery;
 
 import android.database.Cursor;
 import android.provider.ContactsContract;

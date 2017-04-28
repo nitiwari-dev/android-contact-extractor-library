@@ -1,7 +1,7 @@
-package com.bbmyjio.contactextractor.cquery;
+package com.coderconsole.cextracter.cmodels.cquery;
 
 
-import com.bbmyjio.contactextractor.contacts.model.api.CPhone;
+import com.coderconsole.cextracter.cmodels.CPhone;
 
 /**
  * Created by Nitesh on 22-04-2017.

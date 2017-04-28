@@ -1,11 +1,9 @@
-package com.bbmyjio.contactextractor.cquery;
+package com.coderconsole.cextracter.cmodels.cquery;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.util.Log;
-
-import com.bbmyjio.contactextractor.i.IContactQuery;
 
 import java.util.ArrayList;
 import java.util.Date;

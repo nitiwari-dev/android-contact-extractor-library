@@ -1,15 +1,13 @@
-package com.bbmyjio.contactextractor.i;
+package com.coderconsole.cextracter.cmodels.i;
 
-import android.net.Uri;
-
-import com.bbmyjio.contactextractor.cmodels.CAccount;
-import com.bbmyjio.contactextractor.cmodels.CEmail;
-import com.bbmyjio.contactextractor.cmodels.CEvents;
-import com.bbmyjio.contactextractor.cmodels.CGroups;
-import com.bbmyjio.contactextractor.cmodels.CName;
-import com.bbmyjio.contactextractor.cmodels.COrganisation;
-import com.bbmyjio.contactextractor.cmodels.CPostBoxCity;
-import com.bbmyjio.contactextractor.contacts.model.api.CPhone;
+import com.coderconsole.cextracter.cmodels.CAccount;
+import com.coderconsole.cextracter.cmodels.CEmail;
+import com.coderconsole.cextracter.cmodels.CEvents;
+import com.coderconsole.cextracter.cmodels.CGroups;
+import com.coderconsole.cextracter.cmodels.CName;
+import com.coderconsole.cextracter.cmodels.COrganisation;
+import com.coderconsole.cextracter.cmodels.CPhone;
+import com.coderconsole.cextracter.cmodels.CPostBoxCity;
 
 /**
  * Created by Nitesh on 19-04-2017.
