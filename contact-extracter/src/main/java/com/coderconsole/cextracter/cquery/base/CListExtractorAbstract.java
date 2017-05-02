@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.util.Log;
 
-import com.coderconsole.cextracter.cquery.AbstractContactListExtractor;
 import com.coderconsole.cextracter.i.ICFilter;
 import com.coderconsole.cextracter.i.IContactQuery;
 

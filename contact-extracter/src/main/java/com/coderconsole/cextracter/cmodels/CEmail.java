@@ -14,6 +14,7 @@ public class CEmail {
     private HashSet<String> home = new HashSet<>();
     private HashSet<String> mobile = new HashSet<>();
     private HashSet<String> other = new HashSet<>();
+    private String photoUri;
 
     public HashSet<String> getOther() {
         return other;
@@ -45,5 +46,13 @@ public class CEmail {
 
     public void setMobile(HashSet<String> mobile) {
         this.mobile = mobile;
+    }
+
+    public String getPhotoUri() {
+        return photoUri;
+    }
+
+    public void setPhotoUri(String phonoUri) {
+        this.photoUri = phonoUri;
     }
 }

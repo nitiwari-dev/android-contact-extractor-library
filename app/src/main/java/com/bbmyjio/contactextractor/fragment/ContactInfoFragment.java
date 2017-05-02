@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,12 +18,18 @@ import android.widget.Toast;
 import com.bbmyjio.contactextractor.R;
 import com.bbmyjio.contactextractor.adapter.ItemData;
 import com.bbmyjio.contactextractor.adapter.MyAdapter;
+import com.coderconsole.cextracter.cmodels.CAccount;
+import com.coderconsole.cextracter.cmodels.CEmail;
+import com.coderconsole.cextracter.cmodels.CEvents;
 import com.coderconsole.cextracter.cmodels.CGroups;
+import com.coderconsole.cextracter.cmodels.CName;
+import com.coderconsole.cextracter.cmodels.COrganisation;
+import com.coderconsole.cextracter.cmodels.CPhone;
+import com.coderconsole.cextracter.cmodels.CPostBoxCity;
+import com.coderconsole.cextracter.cmodels.ContactGenericType;
 import com.coderconsole.cextracter.cquery.CQuery;
 import com.coderconsole.cextracter.cquery.base.CList;
-import com.coderconsole.cextracter.cquery.common.CommonCList;
 import com.coderconsole.cextracter.i.ICFilter;
-import com.coderconsole.cextracter.i.ICommonContact;
 import com.coderconsole.cextracter.i.IContact;
 
 import java.io.FileNotFoundException;
@@ -99,13 +104,6 @@ public class ContactInfoFragment extends Fragment {
 
 
     private void readAndFillContacts(final int filterType) {
-
-        if (filterType == ICFilter.COMMON) {
-            fillCommonContacts();
-            return;
-        }
-
-
         CQuery cQuery = CQuery.getInstance(getActivity());
         cQuery.filter(filterType);
         cQuery.build(new IContact() {
@@ -115,82 +113,7 @@ public class ContactInfoFragment extends Fragment {
                 Toast.makeText(getActivity(), " Contacts count " + mList.size(), Toast.LENGTH_SHORT).show();
                 if (mList != null && !mList.isEmpty()) {
                     for (CList cList : mList) {
-
-                       /* CAccount cAccount = cList.getcAccount();
-
-                        if (cAccount != null) {
-
-                            StringBuilder builder = new StringBuilder();
-                            for (ContactGenericType contactGenericType : cAccount.getmGenericType()) {
-                                builder.append("Name - " + contactGenericType.name).append("\n" + contactGenericType.type);
-                            }
-                            ItemData itemData = new ItemData("ContactId - " + cList.contactId + "\n" + builder.toString(), uriToBitmapConverter(cList.getPhotoUri()));
-
-                            mListAdapter.add(itemData);
-
-                        }*/
-
-                        /*CPostBoxCity postBoxCity = cList.getcPostCode();
-
-                        if (postBoxCity != null) {
-
-                            StringBuilder builder = new StringBuilder();
-                            for (CPostBoxCity.PostCity postCity:postBoxCity.getmPostCity()){
-                                builder.append("City " + postCity.city).append(" Post "+postCity.post);
-                            }
-
-                            ItemData itemData = new ItemData("ContactId - " + cList.contactId + "\n" + builder.toString(), uriToBitmapConverter(cList.getPhotoUri()));
-
-                            mListAdapter.add(itemData);
-
-                        }*/
-
-                        /*COrganisation org = cList.getcOrg();
-
-                        if (org != null) {
-
-                            StringBuilder builder = new StringBuilder();
-                            for (COrganisation.CompanyDepart companyDepart:org.getCompanyOrgList()){
-                                builder.append("Company " + companyDepart.company).append(" Org "+companyDepart.org);
-                            }
-
-                            ItemData itemData = new ItemData("ContactId - " + cList.contactId + "\n" + builder.toString(), uriToBitmapConverter(cList.getPhotoUri()));
-
-                            mListAdapter.add(itemData);
-
-                        }*/
-
-
-                       /* CEvents events = cList.getcEvents();
-
-                        if (events != null) {
-
-                            StringBuilder builder = new StringBuilder();
-                            builder.append(events.getAnniversay() + "| Birthday |" + events.getBirthDay());
-                            ItemData itemData = new ItemData("ContactId - " + cList.contactId + "\n" + builder.toString(), uriToBitmapConverter(cList.getPhotoUri()));
-
-                            mListAdapter.add(itemData);
-
-                        }*/
-
-
-                        CGroups groups = cList.getcGroups();
-
-                        if (groups != null) {
-
-                            StringBuilder builder = new StringBuilder();
-
-                            for (CGroups.BaseGroups baseGroups : groups.getmList()) {
-                                builder.append("| BaseG |" + baseGroups.getTitle() + "||" + baseGroups.getId());
-                            }
-
-                            ItemData itemData = new ItemData(cList.contactId, builder.toString(), uriToBitmapConverter(cList.getPhotoUri()));
-
-                            mListAdapter.add(itemData);
-
-                        }
-
-
+                        setUpContactList(filterType, cList, mListAdapter);
                     }
                 }
 
@@ -207,48 +130,178 @@ public class ContactInfoFragment extends Fragment {
 
     }
 
-    private void fillCommonContacts() {
-        CQuery cQuery = CQuery.getInstance(getActivity());
-        cQuery.filter(ICFilter.COMMON);
-        cQuery.orderBy(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
-        cQuery.build(new ICommonContact() {
+    private void setUpContactList(int filter, CList cList, List<ItemData> mListAdapter) {
 
-            @Override
-            public void onContactSuccess(List<CommonCList> mList) {
-                if (mList != null && !mList.isEmpty()) {
-                    List<ItemData> mListAdapter = new ArrayList<>();
+        switch (filter) {
+            case ICFilter.ONLY_NAME:
 
-                    Toast.makeText(getActivity(), " Contacts count " + mList.size(), Toast.LENGTH_SHORT).show();
+                CName cName = cList.getcName();
 
-                    for (CommonCList cList : mList) {
+                if (cName != null) {
 
-                        StringBuilder builder = new StringBuilder();
+                    StringBuilder builder = new StringBuilder();
+                    builder.append("Display Name - " + cName.getDisplayName() + "\n");
+                    builder.append("Given Name - " + cName.getGivenName() + "\n");
+                    builder.append("Family Name - " + cName.getFamilyName() + "\n");
 
-                        if (cList.getcPhone() != null) {
-                            builder.append(TextUtils.join(",", cList.getcPhone().getHome()));
-                            builder.append(TextUtils.join(",", cList.getcPhone().getWork()));
-                            builder.append(TextUtils.join(",", cList.getcPhone().getMobile()));
-                            builder.append(TextUtils.join(",", cList.getcPhone().getOther()));
+                    ItemData itemData = new ItemData(cList.contactId, builder.toString(), uriToBitmapConverter(cName.getPhotoUri()));
 
-                        }
+                    mListAdapter.add(itemData);
+
+                }
+
+                break;
+
+            case ICFilter.ONLY_PHONE:
+
+                CPhone cPhone = cList.getcPhone();
+                if (cPhone != null) {
+                    StringBuilder builder = new StringBuilder();
+
+                    builder.append(TextUtils.join(",", cPhone.getHome()));
+                    builder.append(TextUtils.join(",", cPhone.getWork()));
+                    builder.append(TextUtils.join(",", cPhone.getMobile()));
+                    builder.append(TextUtils.join(",", cPhone.getOther()));
+                    ItemData itemData = new ItemData(cPhone.getDisplayName(), builder.toString(), uriToBitmapConverter(cPhone.getPhotoUri()));
+                    mListAdapter.add(itemData);
+                }
 
 
-                        ItemData itemData = new ItemData(cList.getDisplayName(), builder.toString(), uriToBitmapConverter(cList.getPhotoUri()));
+                break;
 
-                        mListAdapter.add(itemData);
+            case ICFilter.ONLY_EMAIL:
+
+                CEmail cEmail = cList.getcEmail();
+
+                if (cEmail != null) {
+
+                    StringBuilder builder = new StringBuilder();
+
+                    if (cEmail.getHome().size() > 0)
+                        builder.append("Home-").append(TextUtils.join(",", cEmail.getHome())).append("\n");
+
+                    if (cEmail.getWork().size() > 0)
+                        builder.append("Work-").append(TextUtils.join(",", cEmail.getWork())).append("\n");
+
+                    if (cEmail.getMobile().size() > 0)
+                        builder.append("Mobile-").append(TextUtils.join(",", cEmail.getMobile())).append("\n");
+
+                    if (cEmail.getOther().size() > 0)
+                        builder.append("Other-").append(TextUtils.join(",", cEmail.getOther())).append("\n");
+
+                    ItemData itemData = new ItemData(cList.getContactId(), builder.toString(), uriToBitmapConverter(cEmail.getPhotoUri()));
+
+                    mListAdapter.add(itemData);
+
+                }
+
+                break;
+
+            case ICFilter.ONLY_ACCOUNT:
+                CAccount cAccount = cList.getcAccount();
+
+                if (cAccount != null) {
+
+                    StringBuilder builder = new StringBuilder();
+                    for (ContactGenericType contactGenericType : cAccount.getmGenericType()) {
+                        builder.append("Name - " + contactGenericType.name).append("\n" + contactGenericType.type);
+                    }
+                    ItemData itemData = new ItemData(cList.contactId, builder.toString(), uriToBitmapConverter(cList.getPhotoUri()));
+
+                    mListAdapter.add(itemData);
+
+                }
+                break;
+
+            case ICFilter.ONLY_ORGANISATION:
+
+                COrganisation org = cList.getcOrg();
+
+                if (org != null) {
+
+                    StringBuilder builder = new StringBuilder();
+                    for (COrganisation.CompanyDepart companyDepart : org.getCompanyOrgList()) {
+                        builder.append("Company-" + companyDepart.getCompany()).append("\nOrg-" + companyDepart.getOrg());
                     }
 
-                    MyAdapter mAdapter = new MyAdapter(mListAdapter);
-                    mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                    mRecyclerView.setAdapter(mAdapter);
-                }
-            }
+                    ItemData itemData = new ItemData(cList.contactId, builder.toString(), uriToBitmapConverter(cList.getPhotoUri()));
 
-            @Override
-            public void onContactError(Throwable throwable) {
-                Toast.makeText(getActivity(), " Error - " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+                    mListAdapter.add(itemData);
+
+                }
+                break;
+
+            case ICFilter.ONLY_EVENTS:
+                CEvents events = cList.getcEvents();
+
+
+                if (events != null) {
+                    StringBuilder builder = new StringBuilder();
+                    builder.append("Birthday-" + events.getBirthDay() + "\nAnniversary-" + events.getAnniversay());
+                    ItemData itemData = new ItemData(cList.contactId, builder.toString(), uriToBitmapConverter(cList.getPhotoUri()));
+                    mListAdapter.add(itemData);
+
+                }
+
+                break;
+
+            case ICFilter.ONLY_GROUPS:
+                CGroups groups = cList.getcGroups();
+
+                if (groups != null) {
+
+                    StringBuilder builder = new StringBuilder();
+
+                    for (CGroups.BaseGroups baseGroups : groups.getmList()) {
+                        builder.append("Title-" + baseGroups.getTitle() + "\nId" + baseGroups.getId());
+                    }
+
+                    ItemData itemData = new ItemData(cList.contactId, builder.toString(), uriToBitmapConverter(cList.getPhotoUri()));
+
+                    mListAdapter.add(itemData);
+
+                }
+
+                break;
+
+            case ICFilter.ONLY_POSTCODE:
+                CPostBoxCity postBoxCity = cList.getcPostCode();
+
+                if (postBoxCity != null) {
+
+                    StringBuilder builder = new StringBuilder();
+                    for (CPostBoxCity.PostCity postCity : postBoxCity.getmPostCity()) {
+                        builder.append("City-" + postCity.getCity()).append("\nPost " + postCity.getPost());
+                    }
+
+                    ItemData itemData = new ItemData(cList.contactId, builder.toString(), uriToBitmapConverter(cList.getPhotoUri()));
+
+                    mListAdapter.add(itemData);
+
+                }
+
+                break;
+
+            case ICFilter.ONLY_PHOTO_URI:
+                String photoUri = cList.getPhotoUri();
+
+                if (photoUri != null) {
+
+                    StringBuilder builder = new StringBuilder();
+
+                    ItemData itemData = new ItemData(cList.contactId, builder.toString(), uriToBitmapConverter(cList.getPhotoUri()));
+
+                    mListAdapter.add(itemData);
+
+                }
+
+                break;
+
+            default:
+                break;
+
+
+        }
     }
 
 

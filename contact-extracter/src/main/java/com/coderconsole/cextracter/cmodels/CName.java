@@ -11,6 +11,7 @@ public class CName {
     private String familyName;
     private String displayName;
     private String givenName;
+    private String photoUri;
 
     public String getFamilyName() {
         return familyName;
@@ -34,5 +35,13 @@ public class CName {
 
     public void setGivenName(String givenName) {
         this.givenName = givenName;
+    }
+
+    public String getPhotoUri() {
+        return photoUri;
+    }
+
+    public void setPhotoUri(String photoUri) {
+        this.photoUri = photoUri;
     }
 }

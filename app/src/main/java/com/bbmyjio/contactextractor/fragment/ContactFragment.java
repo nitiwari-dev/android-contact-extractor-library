@@ -83,16 +83,17 @@ public class ContactFragment extends Fragment {
     private void fillAdapter() {
 
         ContactViewPagerAdapter adapter = new ContactViewPagerAdapter(getFragmentManager());
-        adapter.addFrag(ContactInfoFragment.newInstance(ICFilter.COMMON), "Common");
+        adapter.addFrag(ContactInfoFragment.newInstance(ICFilter.ONLY_PHONE), "Phone");
+        adapter.addFrag(ContactInfoFragment.newInstance(ICFilter.ONLY_EMAIL), "Email");
+        adapter.addFrag(ContactInfoFragment.newInstance(ICFilter.ONLY_NAME), "Name");
+        adapter.addFrag(ContactInfoFragment.newInstance(ICFilter.ONLY_ACCOUNT), "Account");
+        adapter.addFrag(ContactInfoFragment.newInstance(ICFilter.ONLY_EVENTS), "Events");
+        adapter.addFrag(ContactInfoFragment.newInstance(ICFilter.ONLY_ORGANISATION), "Org");
+        adapter.addFrag(ContactInfoFragment.newInstance(ICFilter.ONLY_POSTCODE), "PostCode");
+        adapter.addFrag(ContactInfoFragment.newInstance(ICFilter.ONLY_GROUPS), "Groups");
 
         mcViewPager.setAdapter(adapter);
         mTabLayout.setupWithViewPager(mcViewPager);
-    }
-
-    private Bundle addParam(int common) {
-        Bundle bundle = new Bundle();
-        bundle.putInt(ContactInfoFragment.ARG_PARAM_FILTER, common);
-        return bundle;
     }
 
     @Override

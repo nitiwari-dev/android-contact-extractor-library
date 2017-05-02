@@ -5,16 +5,12 @@ import android.content.Context;
 import com.coderconsole.cextracter.common.permissions.PermissionWrapper;
 import com.coderconsole.cextracter.cquery.base.CList;
 import com.coderconsole.cextracter.cquery.base.CListExtractorAbstract;
-import com.coderconsole.cextracter.cquery.common.CommonCList;
-import com.coderconsole.cextracter.cquery.common.CommonContactListExtractor;
 import com.coderconsole.cextracter.i.IContact;
-import com.coderconsole.cextracter.i.ICommonContact;
 
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.BiConsumer;
-import io.reactivex.internal.observers.BiConsumerSingleObserver;
 import io.reactivex.internal.schedulers.IoScheduler;
 
 /**
@@ -88,26 +84,6 @@ public class CQuery {
                 });
     }
 
-    public void build(final ICommonContact iGenericQuery) {
-        if (!PermissionWrapper.hasContactsPermissions(mContext)) {
-            throw new SecurityException("Contact Permission Missing");
-        }
-
-
-        new CommonContactListExtractor(mContext).getList(mListFilterType, orderBy, limit, skip)
-                .subscribeOn(new IoScheduler())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BiConsumerSingleObserver<>(new BiConsumer<List<CommonCList>, Throwable>() {
-                    @Override
-                    public void accept(List<CommonCList> cLists, Throwable throwable) throws Exception {
-                        if (iGenericQuery == null)
-                            return;
-
-                        if (throwable == null) iGenericQuery.onContactSuccess(cLists);
-                        else iGenericQuery.onContactError(throwable);
-                    }
-                }));
-    }
 
     public CQuery filter(int type) {
         mListFilterType = type;

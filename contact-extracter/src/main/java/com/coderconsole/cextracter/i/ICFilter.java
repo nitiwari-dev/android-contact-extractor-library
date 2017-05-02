@@ -16,6 +16,4 @@ public interface ICFilter {
     int ONLY_EVENTS = 7;
     int ONLY_GROUPS = 8;
     int ONLY_PHOTO_URI = 9;
-    int COMMON = 9;
-
 }

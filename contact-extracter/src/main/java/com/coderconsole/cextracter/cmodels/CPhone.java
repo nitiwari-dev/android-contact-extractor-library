@@ -8,11 +8,29 @@ import java.util.HashSet;
  * Created by nitesh tiwari on 21-01-2017.
  */
 public class CPhone {
+
+    private String displayName;
+    private String photoUri;
     private HashSet<String> work = new HashSet<>();
     private HashSet<String> home = new HashSet<>();
     private HashSet<String> mobile = new HashSet<>();
     private HashSet<String> other = new HashSet<>();
 
+    public String getPhotoUri() {
+        return photoUri;
+    }
+
+    public void setPhotoUri(String photoUri) {
+        this.photoUri = photoUri;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
 
     public HashSet<String> getWork() {
         return work;

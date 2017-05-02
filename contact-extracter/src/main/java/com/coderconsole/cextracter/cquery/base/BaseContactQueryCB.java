@@ -60,10 +60,12 @@ public class BaseContactQueryCB implements IContactQuery {
         HashSet<String> home = email.getHome();
         HashSet<String> work = email.getWork();
         HashSet<String> mobile = email.getMobile();
-        HashSet<String> other = email.getMobile();
+        HashSet<String> other = email.getOther();
 
         int type = cursor.getInt(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.TYPE));
         String data = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
+        String photoUri = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.PHOTO_URI));
+        String displayName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DISPLAY_NAME));
 
         switch (type) {
             case ContactsContract.CommonDataKinds.Email.TYPE_WORK:
@@ -74,6 +76,7 @@ public class BaseContactQueryCB implements IContactQuery {
                 break;
             case ContactsContract.CommonDataKinds.Email.TYPE_MOBILE:
                 mobile.add(data);
+                break;
             default:
                 other.add(data);
                 break;
@@ -86,6 +89,8 @@ public class BaseContactQueryCB implements IContactQuery {
         cEmail.setWork(work);
         cEmail.setHome(home);
         cEmail.setMobile(mobile);
+        cEmail.setOther(other);
+        cEmail.setPhotoUri(photoUri);
         return cEmail;
     }
 
@@ -105,6 +110,9 @@ public class BaseContactQueryCB implements IContactQuery {
 
         String phoneNo = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
         String numberType = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
+        String displayName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+        String photoUri = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI));
+
 
         switch (Integer.valueOf(numberType)) {
             case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
@@ -124,6 +132,9 @@ public class BaseContactQueryCB implements IContactQuery {
         cPhone.setMobile(mobileSet);
         cPhone.setWork(workSet);
         cPhone.setOther(otherSet);
+        cPhone.setDisplayName(displayName);
+        cPhone.setPhotoUri(photoUri);
+
         return cPhone;
     }
 
@@ -185,10 +196,13 @@ public class BaseContactQueryCB implements IContactQuery {
         String familyName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME));
         String displayName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME));
         String givenName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME));
+        String photoUri = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.PHOTO_URI));
+
 
         cName.setFamilyName(familyName);
         cName.setDisplayName(displayName);
         cName.setGivenName(givenName);
+        cName.setPhotoUri(photoUri);
 
         return cName;
     }
