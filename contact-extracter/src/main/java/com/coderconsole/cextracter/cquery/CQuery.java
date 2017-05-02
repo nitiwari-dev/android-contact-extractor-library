@@ -63,7 +63,7 @@ public class CQuery {
     }
 
     public CQuery orderBy(String orderBy) {
-        this.orderBy = skip;
+        this.orderBy = orderBy;
         return this;
     }
 

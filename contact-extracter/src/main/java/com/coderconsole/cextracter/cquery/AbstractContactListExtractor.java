@@ -115,7 +115,7 @@ public abstract class AbstractContactListExtractor {
         switch (type) {
             case ICFilter.COMMON:
                 CONTENT_URI = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-                orderBy = getOrderByQuery(orderBy, limit, skip, ContactsContract.CommonDataKinds.Phone.DATA);
+                orderBy = getOrderByQuery(orderBy, limit, skip, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
                 break;
             case ICFilter.ONLY_EMAIL:
                 CONTENT_URI = ContactsContract.CommonDataKinds.Email.CONTENT_URI;

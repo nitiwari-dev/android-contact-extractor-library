@@ -34,12 +34,14 @@ public class BaseCommonCCQuery implements ICommonCQuery {
     public CPhone getPhone() {
         CPhone cPhone = genericContact.getcPhone();
 
-        if (cPhone == null){
+        if (cPhone == null) {
             cPhone = new CPhone();
         }
         HashSet<String> homeSet = cPhone.getHome();
         HashSet<String> workSet = cPhone.getWork();
         HashSet<String> mobileSet = cPhone.getMobile();
+        HashSet<String> otherSet = cPhone.getOther();
+
 
         String phoneNo = fetchCursor.getString(fetchCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
         String numberType = fetchCursor.getString(fetchCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
@@ -53,12 +55,15 @@ public class BaseCommonCCQuery implements ICommonCQuery {
                 break;
             case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
                 mobileSet.add(phoneNo);
+                break;
             default:
+                otherSet.add(phoneNo);
                 break;
         }
         cPhone.setHome(homeSet);
         cPhone.setMobile(mobileSet);
         cPhone.setWork(workSet);
+        cPhone.setOther(otherSet);
         return cPhone;
     }
 

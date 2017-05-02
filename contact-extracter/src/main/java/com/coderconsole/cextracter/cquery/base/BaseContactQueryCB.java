@@ -100,6 +100,8 @@ public class BaseContactQueryCB implements IContactQuery {
         HashSet<String> homeSet = cPhone.getHome();
         HashSet<String> workSet = cPhone.getWork();
         HashSet<String> mobileSet = cPhone.getMobile();
+        HashSet<String> otherSet = cPhone.getMobile();
+
 
         String phoneNo = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
         String numberType = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
@@ -113,12 +115,15 @@ public class BaseContactQueryCB implements IContactQuery {
                 break;
             case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
                 mobileSet.add(phoneNo);
+                break;
             default:
+                otherSet.add(phoneNo);
                 break;
         }
         cPhone.setHome(homeSet);
         cPhone.setMobile(mobileSet);
         cPhone.setWork(workSet);
+        cPhone.setOther(otherSet);
         return cPhone;
     }
 

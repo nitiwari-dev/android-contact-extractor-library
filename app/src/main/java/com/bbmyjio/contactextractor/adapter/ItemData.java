@@ -10,10 +10,11 @@ public class ItemData {
 
 
     private String title;
+    private String details;
     private Bitmap imageBitmap;
 
-    public ItemData(String title,Bitmap imageBitmap){
-
+    public ItemData(String title, String details, Bitmap imageBitmap) {
+        this.details = details;
         this.title = title;
         this.imageBitmap = imageBitmap;
     }
@@ -32,5 +33,13 @@ public class ItemData {
 
     public void setImageBitmap(Bitmap imageBitmap) {
         this.imageBitmap = imageBitmap;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
     }
 }

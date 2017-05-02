@@ -51,18 +51,22 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             viewHolder.imgViewIcon.setImageBitmap(mListItemData.get(position).getImageBitmap());
         else viewHolder.imgViewIcon.setImageBitmap(null);
 
+        viewHolder.txtViewDetails.setText(mListItemData.get(position).getDetails());
+
 
     }
 
-    // inner class to hold a reference to each item of RecyclerView
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
+        public TextView txtViewDetails;
         public TextView txtViewTitle;
         public ImageView imgViewIcon;
 
         public ViewHolder(View itemLayoutView) {
             super(itemLayoutView);
             txtViewTitle = (TextView) itemLayoutView.findViewById(R.id.item_title);
+            txtViewDetails = (TextView) itemLayoutView.findViewById(R.id.item_detail);
+
             imgViewIcon = (ImageView) itemLayoutView.findViewById(R.id.item_icon);
         }
     }

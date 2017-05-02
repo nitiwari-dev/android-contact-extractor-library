@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -55,7 +56,6 @@ public class ContactInfoFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
 
 
     @Override
@@ -184,7 +184,7 @@ public class ContactInfoFragment extends Fragment {
                                 builder.append("| BaseG |" + baseGroups.getTitle() + "||" + baseGroups.getId());
                             }
 
-                            ItemData itemData = new ItemData("ContactId - " + cList.contactId + "\n" + builder.toString(), uriToBitmapConverter(cList.getPhotoUri()));
+                            ItemData itemData = new ItemData(cList.contactId, builder.toString(), uriToBitmapConverter(cList.getPhotoUri()));
 
                             mListAdapter.add(itemData);
 
@@ -210,7 +210,7 @@ public class ContactInfoFragment extends Fragment {
     private void fillCommonContacts() {
         CQuery cQuery = CQuery.getInstance(getActivity());
         cQuery.filter(ICFilter.COMMON);
-        cQuery.skip("4");
+        cQuery.orderBy(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
         cQuery.build(new ICommonContact() {
 
             @Override
@@ -218,19 +218,22 @@ public class ContactInfoFragment extends Fragment {
                 if (mList != null && !mList.isEmpty()) {
                     List<ItemData> mListAdapter = new ArrayList<>();
 
+                    Toast.makeText(getActivity(), " Contacts count " + mList.size(), Toast.LENGTH_SHORT).show();
+
                     for (CommonCList cList : mList) {
 
                         StringBuilder builder = new StringBuilder();
-                        builder.append(cList.getDisplayName()+"\n");
 
                         if (cList.getcPhone() != null) {
                             builder.append(TextUtils.join(",", cList.getcPhone().getHome()));
                             builder.append(TextUtils.join(",", cList.getcPhone().getWork()));
                             builder.append(TextUtils.join(",", cList.getcPhone().getMobile()));
+                            builder.append(TextUtils.join(",", cList.getcPhone().getOther()));
+
                         }
 
 
-                        ItemData itemData = new ItemData(builder.toString(), uriToBitmapConverter(cList.getPhotoUri()));
+                        ItemData itemData = new ItemData(cList.getDisplayName(), builder.toString(), uriToBitmapConverter(cList.getPhotoUri()));
 
                         mListAdapter.add(itemData);
                     }

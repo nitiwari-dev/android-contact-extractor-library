@@ -41,7 +41,7 @@ public class CListExtractorAbstract extends AbstractContactListExtractor {
         return Single.create(new SingleOnSubscribe<List<CList>>() {
             @Override
             public void subscribe(SingleEmitter<List<CList>> emitter) throws Exception {
-                Cursor fetchCursor = getCursorByType(mFilterType);
+                Cursor fetchCursor = getCursorByType(mFilterType, orderBy);
 
                 if (fetchCursor == null) {
                     emitter.onError(new Exception("Cursor is null"));
