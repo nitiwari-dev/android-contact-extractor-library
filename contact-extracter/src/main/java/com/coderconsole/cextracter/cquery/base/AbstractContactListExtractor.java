@@ -90,7 +90,7 @@ public abstract class AbstractContactListExtractor {
 
     protected Cursor getCursorByType(int type, String orderBy, String limit, String skip) {
 
-        Uri CONTENT_URI = null;
+        Uri CONTENT_URI;
         String selection = null;
         String selectionArgs[] = null;
         String projections[] = null;

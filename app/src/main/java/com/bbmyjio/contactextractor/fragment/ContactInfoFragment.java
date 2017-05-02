@@ -238,7 +238,7 @@ public class ContactInfoFragment extends Fragment {
                 if (events != null) {
                     StringBuilder builder = new StringBuilder();
                     builder.append("Birthday-" + events.getBirthDay() + "\nAnniversary-" + events.getAnniversay());
-                    ItemData itemData = new ItemData(cList.contactId, builder.toString(), uriToBitmapConverter(cList.getPhotoUri()));
+                    ItemData itemData = new ItemData(events.getDisplayName(), builder.toString(), uriToBitmapConverter(events.getPhotoUri()));
                     mListAdapter.add(itemData);
 
                 }
@@ -274,7 +274,7 @@ public class ContactInfoFragment extends Fragment {
                         builder.append("City-" + postCity.getCity()).append("\nPost " + postCity.getPost());
                     }
 
-                    ItemData itemData = new ItemData(cList.contactId, builder.toString(), uriToBitmapConverter(cList.getPhotoUri()));
+                    ItemData itemData = new ItemData(postBoxCity.getDisplayName(), builder.toString(), uriToBitmapConverter(postBoxCity.getPhotoUri()));
 
                     mListAdapter.add(itemData);
 

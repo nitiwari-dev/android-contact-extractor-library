@@ -10,6 +10,10 @@ import java.util.List;
  */
 
 public class COrganisation {
+
+    private String displayName;
+    private String photoUri;
+
     private List<CompanyDepart> companyOrgList = new ArrayList<>();
 
     public List<CompanyDepart> getCompanyOrgList() {
@@ -39,5 +43,22 @@ public class COrganisation {
         public void setOrg(String org) {
             this.org = org;
         }
+
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getPhotoUri() {
+        return photoUri;
+    }
+
+    public void setPhotoUri(String photoUri) {
+        this.photoUri = photoUri;
     }
 }

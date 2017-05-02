@@ -176,12 +176,20 @@ public class BaseContactQueryCB implements IContactQuery {
         String city = cursor.getString(
                 cursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.CITY));
 
+        String photoUri = cursor.getString(
+                cursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.PHOTO_URI));
+
+        String displayName = cursor.getString(
+                cursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.DISPLAY_NAME));
+
         Log.d(TAG, "|Pobox" + poBox + "|City|" + city);
         CPostBoxCity.PostCity postCity = new CPostBoxCity.PostCity();
         postCity.setCity(city);
         postCity.setPost(poBox);
 
         cPostCode.add(postCity);
+        cPostBoxCityList.setPhotoUri(photoUri);
+        cPostBoxCityList.setDisplayName(displayName);
         cPostBoxCityList.setmPostCity(cPostCode);
 
         return cPostBoxCityList;
@@ -225,6 +233,10 @@ public class BaseContactQueryCB implements IContactQuery {
         companyDeparts.add(depart);
 
         cOrganisation.setCompanyOrgList(companyDeparts);
+        cOrganisation.setDisplayName(cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Organization.DISPLAY_NAME)));
+        cOrganisation.setPhotoUri(cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Organization.PHOTO_URI)));
+
+
 
         return cOrganisation;
     }
@@ -252,6 +264,11 @@ public class BaseContactQueryCB implements IContactQuery {
                 break;
         }
 
+        cEvents.setDisplayName(cursor.getString(
+                cursor.getColumnIndex(ContactsContract.CommonDataKinds.Event.DISPLAY_NAME)));
+
+        cEvents.setPhotoUri(cursor.getString(
+                cursor.getColumnIndex(ContactsContract.CommonDataKinds.Event.PHOTO_URI)));
 
         return cEvents;
     }

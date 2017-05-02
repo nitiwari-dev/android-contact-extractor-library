@@ -7,6 +7,11 @@ package com.coderconsole.cextracter.cmodels;
  */
 
 public class CEvents {
+    private String displayName;
+    private String photoUri;
+
+
+
     private String anniversay;
     private String birthDay;
 
@@ -24,5 +29,21 @@ public class CEvents {
 
     public void setBirthDay(String birthDay) {
         this.birthDay = birthDay;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getPhotoUri() {
+        return photoUri;
+    }
+
+    public void setPhotoUri(String photoUri) {
+        this.photoUri = photoUri;
     }
 }
