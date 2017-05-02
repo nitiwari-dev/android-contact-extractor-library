@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,9 @@ import com.bbmyjio.contactextractor.adapter.MyAdapter;
 import com.coderconsole.cextracter.cmodels.CGroups;
 import com.coderconsole.cextracter.cquery.CQuery;
 import com.coderconsole.cextracter.cquery.base.CList;
+import com.coderconsole.cextracter.cquery.common.CommonCList;
 import com.coderconsole.cextracter.i.ICFilter;
+import com.coderconsole.cextracter.i.ICommonContact;
 import com.coderconsole.cextracter.i.IContact;
 
 import java.io.FileNotFoundException;
@@ -45,10 +48,30 @@ public class ContactInfoFragment extends Fragment {
         return parentView;
     }
 
+    public static ContactInfoFragment newInstance(int cType) {
+        ContactInfoFragment fragment = new ContactInfoFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_PARAM_FILTER, cType);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initView();
+
+        Bundle bundle = getArguments();
+        if (bundle == null)
+            return;
+
+        int filterType = bundle.getInt(ARG_PARAM_FILTER, -1);
+
+        if (filterType == -1) return;
+
+        readAndFillContacts(filterType);
     }
 
     private void initView() {
@@ -75,10 +98,16 @@ public class ContactInfoFragment extends Fragment {
     }
 
 
-    private void readAndFillContacts() {
+    private void readAndFillContacts(final int filterType) {
+
+        if (filterType == ICFilter.COMMON) {
+            fillCommonContacts();
+            return;
+        }
+
 
         CQuery cQuery = CQuery.getInstance(getActivity());
-        cQuery.filter(ICFilter.ONLY_GROUPS);
+        cQuery.filter(filterType);
         cQuery.build(new IContact() {
             @Override
             public void onContactSuccess(List<CList> mList) {
@@ -176,6 +205,47 @@ public class ContactInfoFragment extends Fragment {
             }
         });
 
+    }
+
+    private void fillCommonContacts() {
+        CQuery cQuery = CQuery.getInstance(getActivity());
+        cQuery.filter(ICFilter.COMMON);
+        cQuery.skip("4");
+        cQuery.build(new ICommonContact() {
+
+            @Override
+            public void onContactSuccess(List<CommonCList> mList) {
+                if (mList != null && !mList.isEmpty()) {
+                    List<ItemData> mListAdapter = new ArrayList<>();
+
+                    for (CommonCList cList : mList) {
+
+                        StringBuilder builder = new StringBuilder();
+                        builder.append(cList.getDisplayName()+"\n");
+
+                        if (cList.getcPhone() != null) {
+                            builder.append(TextUtils.join(",", cList.getcPhone().getHome()));
+                            builder.append(TextUtils.join(",", cList.getcPhone().getWork()));
+                            builder.append(TextUtils.join(",", cList.getcPhone().getMobile()));
+                        }
+
+
+                        ItemData itemData = new ItemData(builder.toString(), uriToBitmapConverter(cList.getPhotoUri()));
+
+                        mListAdapter.add(itemData);
+                    }
+
+                    MyAdapter mAdapter = new MyAdapter(mListAdapter);
+                    mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                    mRecyclerView.setAdapter(mAdapter);
+                }
+            }
+
+            @Override
+            public void onContactError(Throwable throwable) {
+                Toast.makeText(getActivity(), " Error - " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 

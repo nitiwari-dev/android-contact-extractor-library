@@ -14,19 +14,19 @@ import com.coderconsole.cextracter.i.IContactQuery;
 
 /**
  * BaseContact List Extracter
- *
+ * <p>
  * Created by Nitesh on 22-04-2017.
  */
 
-public abstract class BaseContactListEx {
+public abstract class AbstractContactListExtractor {
 
     private Context mContext;
 
-    public BaseContactListEx(Context mContext) {
+    public AbstractContactListExtractor(Context mContext) {
         this.mContext = mContext;
     }
 
-    private static final String TAG = BaseContactListEx.class.getSimpleName();
+    private static final String TAG = AbstractContactListExtractor.class.getSimpleName();
 
     protected CList queryFilterType(IContactQuery icQuery, int mFilterType, CList cList) {
 
@@ -81,11 +81,11 @@ public abstract class BaseContactListEx {
         return cList;
     }
 
-    protected String orderBy(String orderBy, String limit, String skip) {
+    private String getOrderByQuery(String orderBy, String limit, String skip, String defaultOrderBy) {
 
         StringBuilder sBuilder = new StringBuilder();
 
-        sBuilder.append(!TextUtils.isEmpty(orderBy) ? orderBy : ContactsContract.Contacts.DISPLAY_NAME + " ASC ");
+        sBuilder.append(!TextUtils.isEmpty(orderBy) ? orderBy : defaultOrderBy + " ASC ");
         sBuilder.append(!TextUtils.isEmpty(limit) && TextUtils.isDigitsOnly(limit) ? " limit " + limit + " " : " ");
         sBuilder.append(!TextUtils.isEmpty(skip) && TextUtils.isDigitsOnly(skip) ? " offset " + skip + " " : " ");
 
@@ -94,37 +94,49 @@ public abstract class BaseContactListEx {
 
 
     protected Cursor getCursorByType(int type) {
+        return getCursorByType(type, null);
+    }
+
+    protected Cursor getCursorByType(int type, String orderBy) {
+        return getCursorByType(type, orderBy, null);
+    }
+
+    protected Cursor getCursorByType(int type, String orderBy, String limit) {
+        return getCursorByType(type, orderBy, limit, null);
+    }
+
+    protected Cursor getCursorByType(int type, String orderBy, String limit, String skip) {
 
         Uri CONTENT_URI = null;
         String selection = null;
         String selectionArgs[] = null;
         String projections[] = null;
-        String orderBy = null;
 
         switch (type) {
             case ICFilter.COMMON:
                 CONTENT_URI = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
+                orderBy = getOrderByQuery(orderBy, limit, skip, ContactsContract.CommonDataKinds.Phone.DATA);
                 break;
             case ICFilter.ONLY_EMAIL:
                 CONTENT_URI = ContactsContract.CommonDataKinds.Email.CONTENT_URI;
-                orderBy = ContactsContract.CommonDataKinds.Email.DATA;
                 selection = ContactsContract.CommonDataKinds.Email.DATA + " != " + "\'\' AND " + ContactsContract.CommonDataKinds.Email.DATA + " NOT NULL";
+                orderBy = getOrderByQuery(orderBy, limit, skip,  ContactsContract.CommonDataKinds.Email.DATA);
                 break;
             case ICFilter.ONLY_NAME:
                 CONTENT_URI = ContactsContract.Data.CONTENT_URI;
                 selection = ContactsContract.Data.MIMETYPE + " = ?";
                 selectionArgs = new String[]{ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE};
-                orderBy = ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME;
+                orderBy = getOrderByQuery(orderBy, limit, skip,  ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME);
                 break;
 
             case ICFilter.ONLY_ACCOUNT:
                 CONTENT_URI = ContactsContract.RawContacts.CONTENT_URI;
-                orderBy = ContactsContract.RawContacts.CONTACT_ID;
+                orderBy = getOrderByQuery(orderBy, limit, skip,  ContactsContract.RawContacts.CONTACT_ID);
                 break;
 
             case ICFilter.ONLY_POSTCODE:
                 CONTENT_URI = ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI;
-
+                orderBy = getOrderByQuery(orderBy, limit, skip,  ContactsContract.CommonDataKinds.StructuredPostal.CONTACT_ID);
                 break;
 
             case ICFilter.ONLY_ORGANISATION:
@@ -132,6 +144,9 @@ public abstract class BaseContactListEx {
                 selection = ContactsContract.Data.MIMETYPE + " = ?";
                 selectionArgs = new String[]{
                         ContactsContract.CommonDataKinds.Organization.CONTENT_ITEM_TYPE};
+
+                orderBy = getOrderByQuery(orderBy, limit, skip,  ContactsContract.CommonDataKinds.Organization.CONTACT_ID);
+
                 break;
 
             case ICFilter.ONLY_EVENTS:
@@ -139,10 +154,14 @@ public abstract class BaseContactListEx {
                 selection = ContactsContract.Data.MIMETYPE + " = ?";
                 selectionArgs = new String[]{
                         ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE};
+
+                orderBy = getOrderByQuery(orderBy, limit, skip,  ContactsContract.CommonDataKinds.Event.CONTACT_ID);
+
                 break;
 
             case ICFilter.ONLY_GROUPS:
                 CONTENT_URI = ContactsContract.Groups.CONTENT_URI;
+                orderBy = getOrderByQuery(orderBy, limit, skip,  ContactsContract.Groups._ID);
                 break;
         }
 

@@ -4,9 +4,9 @@ import android.content.Context;
 
 import com.coderconsole.cextracter.common.permissions.PermissionWrapper;
 import com.coderconsole.cextracter.cquery.base.CList;
-import com.coderconsole.cextracter.cquery.base.CListExtractor;
+import com.coderconsole.cextracter.cquery.base.CListExtractorAbstract;
 import com.coderconsole.cextracter.cquery.common.CommonCList;
-import com.coderconsole.cextracter.cquery.common.CommonCListExtracter;
+import com.coderconsole.cextracter.cquery.common.CommonContactListExtractor;
 import com.coderconsole.cextracter.i.IContact;
 import com.coderconsole.cextracter.i.ICommonContact;
 
@@ -54,21 +54,26 @@ public class CQuery {
 
     public CQuery limit(String limit) {
         this.limit = limit;
-        return cQuery;
+        return this;
     }
 
     public CQuery skip(String skip) {
         this.skip = skip;
-        return cQuery;
+        return this;
+    }
+
+    public CQuery orderBy(String orderBy) {
+        this.orderBy = skip;
+        return this;
     }
 
     public void build(final IContact iContact) {
 
-       if (!PermissionWrapper.hasContactsPermissions(mContext)) {
+        if (!PermissionWrapper.hasContactsPermissions(mContext)) {
             throw new SecurityException("Contact Permission Missing");
         }
 
-        new CListExtractor(mContext).getList(mListFilterType, orderBy, limit, skip)
+        new CListExtractorAbstract(mContext).getList(mListFilterType, orderBy, limit, skip)
                 .subscribeOn(new IoScheduler())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BiConsumer<List<CList>, Throwable>() {
@@ -89,7 +94,7 @@ public class CQuery {
         }
 
 
-        new CommonCListExtracter(mContext).getList(mListFilterType, orderBy, limit, skip)
+        new CommonContactListExtractor(mContext).getList(mListFilterType, orderBy, limit, skip)
                 .subscribeOn(new IoScheduler())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BiConsumerSingleObserver<>(new BiConsumer<List<CommonCList>, Throwable>() {
@@ -113,11 +118,6 @@ public class CQuery {
         mListFilterType.addAll(type);
         return this;
     }*/
-
-    public CQuery orderBy(String orderBy) {
-        this.orderBy = orderBy;
-        return this;
-    }
 
 
 }

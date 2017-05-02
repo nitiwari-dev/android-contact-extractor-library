@@ -3,9 +3,10 @@ package com.coderconsole.cextracter.cquery.common;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.ContactsContract;
+import android.text.TextUtils;
 import android.util.Log;
 
-import com.coderconsole.cextracter.cquery.BaseContactListEx;
+import com.coderconsole.cextracter.cquery.AbstractContactListExtractor;
 import com.coderconsole.cextracter.cquery.ICommonCQuery;
 
 import java.util.ArrayList;
@@ -24,22 +25,21 @@ import io.reactivex.SingleOnSubscribe;
  * Created by Nitesh on 19-04-2017.
  */
 
-public class CommonCListExtracter extends BaseContactListEx {
+public class CommonContactListExtractor extends AbstractContactListExtractor {
 
-    private static final String TAG = CommonCListExtracter.class.getSimpleName();
+    private static final String TAG = CommonContactListExtractor.class.getSimpleName();
 
-    public CommonCListExtracter(Context mContext) {
+    public CommonContactListExtractor(Context mContext) {
         super(mContext);
     }
 
 
     public Single<List<CommonCList>> getList(final int mFilterType, final String orderBy,
-                                      final String limit, final String skip) {
-
+                                             final String limit, final String skip) {
         return Single.create(new SingleOnSubscribe<List<CommonCList>>() {
             @Override
             public void subscribe(SingleEmitter<List<CommonCList>> emitter) throws Exception {
-                Cursor fetchCursor = getCursorByType(mFilterType);
+                Cursor fetchCursor = getCursorByType(mFilterType, orderBy);
 
                 if (fetchCursor == null) {
                     emitter.onError(new Exception("Cursor is null"));
@@ -63,10 +63,23 @@ public class CommonCListExtracter extends BaseContactListEx {
                 Log.d(TAG, "|End" + new Date(System.currentTimeMillis()).toString() + "\n No Phone " + (fetchCursor.getCount() - count));
 
                 fetchCursor.close();
-                emitter.onSuccess(commonCLists);
+                emitter.onSuccess(limitOrSkip(commonCLists, limit, skip));
 
             }
         });
+    }
+
+    private List<CommonCList> limitOrSkip(List<CommonCList> commonCLists, String limit, String skip) {
+        int startIndex = 0;
+        int endIndex = commonCLists.size();
+
+        if (!TextUtils.isEmpty(limit) && TextUtils.isDigitsOnly(limit))
+            endIndex = Integer.valueOf(limit);
+
+        if (!TextUtils.isEmpty(skip) && TextUtils.isDigitsOnly(skip))
+            startIndex = Integer.valueOf(skip);
+
+        return commonCLists.subList(startIndex, endIndex);
     }
 
     private Map<String, CommonCList> fillMap(Cursor fetchCursor, Map<String, CommonCList> cListMap, int mFilterType) {

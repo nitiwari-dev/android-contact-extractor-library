@@ -5,7 +5,7 @@ import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.util.Log;
 
-import com.coderconsole.cextracter.cquery.BaseContactListEx;
+import com.coderconsole.cextracter.cquery.AbstractContactListExtractor;
 import com.coderconsole.cextracter.i.ICFilter;
 import com.coderconsole.cextracter.i.IContactQuery;
 
@@ -25,12 +25,12 @@ import io.reactivex.SingleOnSubscribe;
  * Created by Nitesh on 25-04-2017.
  */
 
-public class CListExtractor extends BaseContactListEx {
-    private final static String TAG = CListExtractor.class.getSimpleName();
+public class CListExtractorAbstract extends AbstractContactListExtractor {
+    private final static String TAG = CListExtractorAbstract.class.getSimpleName();
 
     private Context mContext;
 
-    public CListExtractor(Context mContext) {
+    public CListExtractorAbstract(Context mContext) {
         super(mContext);
         this.mContext = mContext;
     }

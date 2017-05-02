@@ -49,7 +49,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         Bitmap bitmap = mListItemData.get(position).getImageBitmap();
         if (bitmap != null)
             viewHolder.imgViewIcon.setImageBitmap(mListItemData.get(position).getImageBitmap());
-        else viewHolder.imgViewIcon.setImageResource(R.mipmap.ic_launcher);
+        else viewHolder.imgViewIcon.setImageBitmap(null);
 
 
     }

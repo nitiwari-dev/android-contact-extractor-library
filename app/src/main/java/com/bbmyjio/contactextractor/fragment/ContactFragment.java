@@ -3,6 +3,7 @@ package com.bbmyjio.contactextractor.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -10,7 +11,6 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TableLayout;
 
 import com.bbmyjio.contactextractor.R;
 import com.coderconsole.cextracter.i.ICFilter;
@@ -32,8 +32,8 @@ public class ContactFragment extends Fragment {
 
 
     private View mParentView;
-    private TableLayout mTabLayout;
     private ViewPager mcViewPager;
+    private TabLayout mTabLayout;
 
     public ContactFragment() {
         // Required empty public constructor
@@ -73,7 +73,7 @@ public class ContactFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mTabLayout = (TableLayout) mParentView.findViewById(R.id.cTabsLayout);
+        mTabLayout = (TabLayout) mParentView.findViewById(R.id.cTabsLayout);
         mcViewPager = (ViewPager) mParentView.findViewById(R.id.cViewPager);
 
         fillAdapter();
@@ -83,8 +83,10 @@ public class ContactFragment extends Fragment {
     private void fillAdapter() {
 
         ContactViewPagerAdapter adapter = new ContactViewPagerAdapter(getFragmentManager());
-        adapter.addFrag(ContactInfoFragment.instantiate(getActivity(), ContactInfoFragment.class.getSimpleName(), addParam(ICFilter.COMMON)), ContactInfoFragment.class.getSimpleName());
+        adapter.addFrag(ContactInfoFragment.newInstance(ICFilter.COMMON), "Common");
 
+        mcViewPager.setAdapter(adapter);
+        mTabLayout.setupWithViewPager(mcViewPager);
     }
 
     private Bundle addParam(int common) {
