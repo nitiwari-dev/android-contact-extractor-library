@@ -25,7 +25,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.RelativeLayout;
 
-import com.bbmyjio.contactextractor.common.permissions.RunTimePermissionWrapper;
 import com.bbmyjio.contactextractor.fragment.ContactFragment;
 
 public class MainActivity extends AppCompatActivity {

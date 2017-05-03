@@ -14,11 +14,13 @@
  *   limitations under the License.
  */
 
-package com.bbmyjio.contactextractor.common.permissions;
+package com.bbmyjio.contactextractor;
 
 import android.Manifest;
 import android.app.Activity;
 import android.support.v4.app.ActivityCompat;
+
+import com.coderconsole.cextracter.common.permissions.PermissionWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,23 +56,7 @@ public class RunTimePermissionWrapper extends PermissionWrapper {
 
         int permissionSize = neededPermissionList.size();
         if (permissionSize > 0) {
-
-            if (isShowBBDialogForPermission) {
-                //For only one permission ask for notification again
-                if (permissionSize == 1) {
-
-                    if (!PermissionPrefs.getFirstDenyPermission(activity)) {
-                        ActivityCompat.requestPermissions(activity, neededPermissionList.toArray(new String[permissionSize]), multiplePermissionRequestCode);
-                        PermissionPrefs.setFirstDenyPermission(activity, true);
-                        return;
-                    }
-                }
-
-                //DONOT show NOT NOW Button for multiple permissions on walkthrough.
-//                showDialogForPermission(activity, multiplePermissionRequestCode, (multiplePermissionRequestCode != REQUEST_CODE.MULTIPLE_WALKTHROUGH), multiplePermissions);
-            } else {
-                ActivityCompat.requestPermissions(activity, neededPermissionList.toArray(new String[permissionSize]), multiplePermissionRequestCode);
-            }
+            ActivityCompat.requestPermissions(activity, neededPermissionList.toArray(new String[permissionSize]), multiplePermissionRequestCode);
         }
 
     }
