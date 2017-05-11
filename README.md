@@ -1,6 +1,6 @@
 # android-contact-extractor
 
-Extract all the contacts from android 'Contacts' application by providing simple easy-to-use apis. It helps to remove the overhead with some messy contacts content provider query.
+Extract all the contacts from android 'Contacts' application by using simple easy-to-use apis. It helps to remove the overhead of querying contact content provider.
 
 Name             |  Phone
 :-------------------------:|:-------------------------:
