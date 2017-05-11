@@ -64,16 +64,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         else viewHolder.imgViewIcon.setImageResource(R.drawable.ic_account_box_black_24dp);
 
 
-
-        String info = String.format(mContext.getString(R.string.contact_detail_info), mListItemData.get(position).getDetails());
-
-        String data;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            data = Html.fromHtml(info, Html.FROM_HTML_MODE_LEGACY).toString();
-        } else {
-            data = Html.fromHtml(info).toString();
-        }
-        viewHolder.txtViewDetails.setText(data);
+        viewHolder.txtViewDetails.setText(mListItemData.get(position).getDetails());
 
 
     }

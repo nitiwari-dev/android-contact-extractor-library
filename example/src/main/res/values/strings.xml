@@ -16,9 +16,4 @@
 
 <resources>
     <string name="app_name">ContactExtractor</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="contact_detail_info"><![CDATA[
-        %1$s
-    ]]></string>
 </resources>

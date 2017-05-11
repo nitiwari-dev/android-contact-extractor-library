@@ -59,6 +59,8 @@ public class ContactInfoFragment extends Fragment {
     private View parentView;
     private RecyclerView mRecyclerView;
 
+    private static final String SEPERATOR = " / ";
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -151,9 +153,9 @@ public class ContactInfoFragment extends Fragment {
                 if (cName != null) {
 
                     StringBuilder builder = new StringBuilder();
-                    builder.append("<b>Display Name</b> - " + cName.getDisplayName() + "\n");
-                    builder.append("Given Name - " + cName.getGivenName() + "\n");
-                    builder.append("Family Name - " + cName.getFamilyName() + "\n");
+                    builder.append("Display Name - " + cName.getDisplayName()).append(System.getProperty("line.separator"));
+                    builder.append("Given Name - " + cName.getGivenName()).append(System.getProperty("line.separator"));
+                    builder.append("Family Name - " + cName.getFamilyName()).append(System.getProperty("line.separator"));
 
                     ItemData itemData = new ItemData(cList.contactId, builder.toString(), uriToBitmapConverter(cName.getPhotoUri()));
 
@@ -169,10 +171,17 @@ public class ContactInfoFragment extends Fragment {
                 if (cPhone != null) {
                     StringBuilder builder = new StringBuilder();
 
-                    builder.append(TextUtils.join(",", cPhone.getHome()));
-                    builder.append(TextUtils.join(",", cPhone.getWork()));
-                    builder.append(TextUtils.join(",", cPhone.getMobile()));
-                    builder.append(TextUtils.join(",", cPhone.getOther()));
+                    if (cPhone.getHome().size() > 0)
+                        builder.append("Home - " + TextUtils.join(SEPERATOR, cPhone.getHome())).append(System.getProperty("line.separator"));
+
+                    if (cPhone.getWork().size() > 0)
+                        builder.append("Work - " + TextUtils.join(SEPERATOR, cPhone.getWork())).append(System.getProperty("line.separator"));
+
+                    if (cPhone.getMobile().size() > 0)
+                        builder.append("Mobile - " + TextUtils.join(SEPERATOR, cPhone.getMobile())).append(System.getProperty("line.separator"));
+
+                    if (cPhone.getOther().size() > 0)
+                        builder.append("Other - " + TextUtils.join(SEPERATOR, cPhone.getOther())).append(System.getProperty("line.separator"));
                     ItemData itemData = new ItemData(cPhone.getDisplayName(), builder.toString(), uriToBitmapConverter(cPhone.getPhotoUri()));
                     mListAdapter.add(itemData);
                 }
@@ -189,16 +198,16 @@ public class ContactInfoFragment extends Fragment {
                     StringBuilder builder = new StringBuilder();
 
                     if (cEmail.getHome().size() > 0)
-                        builder.append("Home-").append(TextUtils.join(",", cEmail.getHome())).append("\n");
+                        builder.append("Home - ").append(TextUtils.join(SEPERATOR, cEmail.getHome())).append(System.getProperty("line.separator"));
 
                     if (cEmail.getWork().size() > 0)
-                        builder.append("Work-").append(TextUtils.join(",", cEmail.getWork())).append("\n");
+                        builder.append("Work - ").append(TextUtils.join(SEPERATOR, cEmail.getWork())).append(System.getProperty("line.separator"));
 
                     if (cEmail.getMobile().size() > 0)
-                        builder.append("Mobile-").append(TextUtils.join(",", cEmail.getMobile())).append("\n");
+                        builder.append("Mobile - ").append(TextUtils.join(SEPERATOR, cEmail.getMobile())).append(System.getProperty("line.separator"));
 
                     if (cEmail.getOther().size() > 0)
-                        builder.append("Other-").append(TextUtils.join(",", cEmail.getOther())).append("\n");
+                        builder.append("Other - ").append(TextUtils.join(SEPERATOR, cEmail.getOther())).append(System.getProperty("line.separator"));
 
                     ItemData itemData = new ItemData(cList.getContactId(), builder.toString(), uriToBitmapConverter(cEmail.getPhotoUri()));
 
@@ -215,7 +224,7 @@ public class ContactInfoFragment extends Fragment {
 
                     StringBuilder builder = new StringBuilder();
                     for (ContactGenericType contactGenericType : cAccount.getmGenericType()) {
-                        builder.append("Name - " + contactGenericType.name).append("\n" + contactGenericType.type);
+                        builder.append("Name - " + contactGenericType.name).append(System.getProperty("line.separator") + contactGenericType.type);
                     }
                     ItemData itemData = new ItemData(cList.contactId, builder.toString(), uriToBitmapConverter(cList.getPhotoUri()));
 
@@ -232,7 +241,7 @@ public class ContactInfoFragment extends Fragment {
 
                     StringBuilder builder = new StringBuilder();
                     for (COrganisation.CompanyDepart companyDepart : org.getCompanyOrgList()) {
-                        builder.append("Company-" + companyDepart.getCompany()).append("\nOrg-" + companyDepart.getOrg());
+                        builder.append("Company - " + companyDepart.getCompany()).append(System.getProperty("line.separator")).append("Org - " + companyDepart.getOrg());
                     }
 
                     ItemData itemData = new ItemData(cList.contactId, builder.toString(), uriToBitmapConverter(cList.getPhotoUri()));
@@ -248,7 +257,13 @@ public class ContactInfoFragment extends Fragment {
 
                 if (events != null) {
                     StringBuilder builder = new StringBuilder();
-                    builder.append("Birthday-" + events.getBirthDay() + "\nAnniversary-" + events.getAnniversay());
+
+                    if (!TextUtils.isEmpty(events.getBirthDay()))
+                        builder.append("Birthday - " + events.getBirthDay());
+
+                    if (!TextUtils.isEmpty(events.getAnniversay()))
+                        builder.append(System.getProperty("line.separator")).append("Anniversary - " + events.getAnniversay());
+
                     ItemData itemData = new ItemData(events.getDisplayName(), builder.toString(), uriToBitmapConverter(events.getPhotoUri()));
                     mListAdapter.add(itemData);
 
@@ -264,7 +279,12 @@ public class ContactInfoFragment extends Fragment {
                     StringBuilder builder = new StringBuilder();
 
                     for (CGroups.BaseGroups baseGroups : groups.getmList()) {
-                        builder.append("Title-" + baseGroups.getTitle() + "\nId" + baseGroups.getId());
+
+                        builder.append("Id - " + baseGroups.getId());
+
+                        if (!TextUtils.isEmpty(baseGroups.getTitle()))
+                            builder.append(System.getProperty("line.separator")).append("Title - " + baseGroups.getTitle());
+
                     }
 
                     ItemData itemData = new ItemData(cList.contactId, builder.toString(), uriToBitmapConverter(cList.getPhotoUri()));
@@ -282,7 +302,7 @@ public class ContactInfoFragment extends Fragment {
 
                     StringBuilder builder = new StringBuilder();
                     for (CPostBoxCity.PostCity postCity : postBoxCity.getmPostCity()) {
-                        builder.append("City-" + postCity.getCity()).append("\nPost " + postCity.getPost());
+                        builder.append("City-" + postCity.getCity()).append(System.getProperty("line.separator")).append("Post " + postCity.getPost());
                     }
 
                     ItemData itemData = new ItemData(postBoxCity.getDisplayName(), builder.toString(), uriToBitmapConverter(postBoxCity.getPhotoUri()));
