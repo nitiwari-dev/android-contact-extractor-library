@@ -2,6 +2,10 @@
 
 Extract all the contacts from android 'Contacts' application by providing simple easy-to-use apis. It helps to remove the overhead with some messy contacts content provider query.
 
+Name             |  Phone
+:-------------------------:|:-------------------------:
+![name](https://cloud.githubusercontent.com/assets/10304040/25949742/35328eec-3676-11e7-84b2-a864b30269ea.png) | ![phone](https://cloud.githubusercontent.com/assets/10304040/25949859/a4cb69f4-3676-11e7-96bf-8231f3694792.png)
+
 ## Few Examples:
 
 ###### Extract all the PHONE - Its contains home/work/phone/other contacts within as ``HashSet<String>``
