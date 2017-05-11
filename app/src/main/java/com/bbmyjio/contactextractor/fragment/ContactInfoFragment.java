@@ -33,7 +33,7 @@ import android.widget.Toast;
 
 import com.bbmyjio.contactextractor.R;
 import com.bbmyjio.contactextractor.adapter.ItemData;
-import com.bbmyjio.contactextractor.adapter.MyAdapter;
+import com.bbmyjio.contactextractor.adapter.ContactAdapter;
 import com.coderconsole.cextracter.cmodels.CAccount;
 import com.coderconsole.cextracter.cmodels.CEmail;
 import com.coderconsole.cextracter.cmodels.CEvents;
@@ -52,10 +52,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-/**
- * Created by Nitesh on 28-04-2017.
- */
 
 public class ContactInfoFragment extends Fragment {
 
@@ -104,7 +100,6 @@ public class ContactInfoFragment extends Fragment {
 
     public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
-
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             super.getItemOffsets(outRect, view, parent, state);
@@ -126,14 +121,14 @@ public class ContactInfoFragment extends Fragment {
             @Override
             public void onContactSuccess(List<CList> mList) {
                 List<ItemData> mListAdapter = new ArrayList<>();
-                Toast.makeText(getActivity(), " Contacts count " + mList.size(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), " Contacts count " + mList.size(), Toast.LENGTH_SHORT).show();
                 if (mList != null && !mList.isEmpty()) {
                     for (CList cList : mList) {
                         setUpContactList(filterType, cList, mListAdapter);
                     }
                 }
 
-                MyAdapter mAdapter = new MyAdapter(mListAdapter);
+                ContactAdapter mAdapter = new ContactAdapter(mListAdapter);
                 mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 mRecyclerView.setAdapter(mAdapter);
             }

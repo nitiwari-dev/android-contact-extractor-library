@@ -34,13 +34,6 @@ import com.coderconsole.cextracter.i.ICFilter;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * to handle interaction events.
- * Use the {@link ContactFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ContactFragment extends Fragment {
     private static final String ARG_CONTACT_TYPE = "contactTypeParam";
 
@@ -55,13 +48,6 @@ public class ContactFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param cType Parameter 1.
-     * @return A new instance of fragment ContactFragment.
-     */
     public static ContactFragment newInstance(String cType) {
         ContactFragment fragment = new ContactFragment();
         Bundle args = new Bundle();

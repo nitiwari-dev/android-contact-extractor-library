@@ -17,6 +17,7 @@
 package com.bbmyjio.contactextractor.adapter;
 
 import android.graphics.Bitmap;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,44 +29,33 @@ import com.bbmyjio.contactextractor.R;
 
 import java.util.List;
 
-
-/**
- * Created by Nitesh on 21-04-2017.
- */
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> {
     private List<ItemData> mListItemData;
 
-    public MyAdapter(List<ItemData> mListItemData) {
+    public ContactAdapter(List<ItemData> mListItemData) {
         this.mListItemData = mListItemData;
     }
 
-    // Create new views (invoked by the layout manager)
     @Override
-    public MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                   int viewType) {
-        // create a new view
+    public ContactAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+                                                        int viewType) {
         View itemLayoutView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.view_row_recylcer, null);
 
-        // create ViewHolder
 
         ViewHolder viewHolder = new ViewHolder(itemLayoutView);
         return viewHolder;
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-
-        // - get data from your itemsData at this position
-        // - replace the contents of the view with that itemsData
 
         viewHolder.txtViewTitle.setText(mListItemData.get(position).getTitle());
 
         Bitmap bitmap = mListItemData.get(position).getImageBitmap();
         if (bitmap != null)
             viewHolder.imgViewIcon.setImageBitmap(mListItemData.get(position).getImageBitmap());
-        else viewHolder.imgViewIcon.setImageBitmap(null);
+        else viewHolder.imgViewIcon.setImageResource(R.drawable.ic_account_box_black_24dp);
 
         viewHolder.txtViewDetails.setText(mListItemData.get(position).getDetails());
 
@@ -87,8 +77,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         }
     }
 
-
-    // Return the size of your itemsData (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return mListItemData.size();

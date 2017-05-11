@@ -18,10 +18,6 @@ package com.bbmyjio.contactextractor.adapter;
 
 import android.graphics.Bitmap;
 
-/**
- * Created by Nitesh on 21-04-2017.
- */
-
 public class ItemData {
 
 
