@@ -8,6 +8,8 @@ Name             |  Phone
 
 ## Setup
 
+###### Method 1:
+
 1. Build
 
         $ git clone https://github.com/nitiwari-dev/android-contact-extractor.git
@@ -24,8 +26,15 @@ Name             |  Phone
                             dirs 'libs' //this way we can find the .aar file in libs folder
                         }
                 }
+ 
+ 4. Add within the dependencies section of module ``build.gradle`` file
+ 
+                compile(name: 'contact-extractor-library', ext: 'aar')
                 
- 4. Thats It we're ready to user contact-extractor-library.
+                
+ ###### Method 2:
+ 1. [Download Latest .jar v1.0.0](https://goo.gl/KFMxL4) and place with in libs folder.
+ 2. Add below into build.gradle as dependencies.
  
  
 ## Few Examples:
