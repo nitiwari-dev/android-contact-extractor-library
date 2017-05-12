@@ -6,6 +6,28 @@ Name             |  Phone
 :-------------------------:|:-------------------------:
 ![name](https://cloud.githubusercontent.com/assets/10304040/25949742/35328eec-3676-11e7-84b2-a864b30269ea.png) | ![phone](https://cloud.githubusercontent.com/assets/10304040/25949859/a4cb69f4-3676-11e7-96bf-8231f3694792.png)
 
+## Setup
+
+1. Build
+
+        $ git clone https://github.com/nitiwari-dev/android-contact-extractor.git
+        $ cd android-contact-extractor
+        $ gradlew contact-extractor-library:build
+
+2. Copy ``.aar`` file from ``/contact-extractor-library/builds/outputs/aar`` folder and place into ``libs`` folder of your project.
+
+3. Make sure you have below code within your module's ``build.gradle`` file
+               
+               repositories {
+                        jcenter()
+                        flatDir {
+                            dirs 'libs' //this way we can find the .aar file in libs folder
+                        }
+                }
+                
+ 4. Thats It we're ready to user contact-extractor-library.
+ 
+ 
 ## Few Examples:
 
 ###### Extract all the PHONE - Its contains home/work/phone/other contacts within as ``HashSet<String>``
@@ -74,6 +96,13 @@ Name             |  Phone
         });
 
 Bingo Thats it !!!. Just change filter types and get the contact information accordingly. 
+
+## Acknowledgement
+[RxAndroid](https://github.com/ReactiveX/RxAndroid)
+
+## Thank You
+Please do follows us on [TWITTER](https://twitter.com/coderconsole) and check out [BLOG](http://www.coderconsole.com/).
+#codingIsAnArt
 
 ## Licence
         Copyright (C) 2017 Nitesh Tiwari.
