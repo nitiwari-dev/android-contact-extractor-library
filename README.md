@@ -9,7 +9,7 @@ Name             |  Phone
 ## Setup
 Add permission in AndriodManifest.xml
                 
-                <uses-permission android:name="android.permission.READ_CONTACTS"/>
+         <uses-permission android:name="android.permission.READ_CONTACTS"/>
                 
 ###### Method 1:
 
