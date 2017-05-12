@@ -35,7 +35,8 @@ Name             |  Phone
  ###### Method 2:
  1. [Download Latest .jar v1.0.0](https://goo.gl/KFMxL4) and place with in libs folder.
  2. Add below into build.gradle as dependencies.
- 
+        
+        compile files('libs/contact-extractor_1.0.0.jar')
  
 ## Few Examples:
 
