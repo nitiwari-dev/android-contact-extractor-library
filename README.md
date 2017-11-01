@@ -11,7 +11,7 @@ Add permission in AndriodManifest.xml
                 
          <uses-permission android:name="android.permission.READ_CONTACTS"/>
                 
-###### Method 1:
+###START###
 
 1. Build
 
@@ -35,11 +35,7 @@ Add permission in AndriodManifest.xml
                 compile(name: 'contact-extractor-library', ext: 'aar')
                 
                 
- ###### Method 2:
- 1. [Download Latest .jar v1.0.0](https://goo.gl/KFMxL4) and place with in libs folder.
- 2. Add below into build.gradle as dependencies.
-        
-        compile files('libs/contact-extractor_1.0.0.jar')
+ ###END###
  
 ## Few Examples:
 

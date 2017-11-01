@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                 if (isRationale)
                     RunTimePermissionWrapper.handleRunTimePermission(MainActivity.this, RunTimePermissionWrapper.REQUEST_CODE.MULTIPLE_WALKTHROUGH, WALK_THROUGH);
                 else
-                    startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
+                    startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 1001);
             }
         });
 
