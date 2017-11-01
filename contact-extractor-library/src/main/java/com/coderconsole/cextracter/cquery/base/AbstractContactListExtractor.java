@@ -66,9 +66,6 @@ public abstract class AbstractContactListExtractor {
             case ICFilter.ONLY_POSTCODE:
                 cList.setcPostCode(icQuery.getPostCode());
                 break;
-            case ICFilter.ONLY_PHOTO_URI:
-                cList.setPhotoUri(icQuery.getPhotoUri());
-                break;
             case ICFilter.ONLY_GROUPS:
                 cList.setcGroups(icQuery.getGroups());
                 break;
@@ -171,10 +168,8 @@ public abstract class AbstractContactListExtractor {
         }
 
 
-        Cursor fetchCursor = mContext.getContentResolver().query(CONTENT_URI,
+        return mContext.getContentResolver().query(CONTENT_URI,
                 projections, selection, selectionArgs, orderBy);
-
-        return fetchCursor;
 
     }
 }

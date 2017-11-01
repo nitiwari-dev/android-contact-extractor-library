@@ -53,6 +53,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.disposables.Disposable;
+
 public class ContactInfoFragment extends Fragment {
 
     public static final String ARG_PARAM_FILTER = "arg_filter";
@@ -60,6 +62,19 @@ public class ContactInfoFragment extends Fragment {
     private RecyclerView mRecyclerView;
 
     private static final String SEPERATOR = " / ";
+    private ContactAdapter mAdapter;
+
+    List<ItemData> itemDataList = new ArrayList<>();
+    private Disposable disposable;
+
+    @Override
+    public void onDestroy() {
+
+        if (disposable != null && !disposable.isDisposed()){
+            disposable.dispose();
+        }
+        super.onDestroy();
+    }
 
     @Nullable
     @Override
@@ -76,6 +91,10 @@ public class ContactInfoFragment extends Fragment {
         return fragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -90,13 +109,18 @@ public class ContactInfoFragment extends Fragment {
 
         if (filterType == -1) return;
 
-        readAndFillContacts(filterType);
+        mAdapter = new ContactAdapter(getActivity(), itemDataList);
+        mRecyclerView.setAdapter(mAdapter);
+
+        disposable = readAndFillContacts(filterType);
     }
 
     private void initView() {
         RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration();
         mRecyclerView = (RecyclerView) parentView.findViewById(R.id.contactRecyclerView);
         mRecyclerView.addItemDecoration(itemDecoration);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
     }
 
 
@@ -116,23 +140,22 @@ public class ContactInfoFragment extends Fragment {
     }
 
 
-    private void readAndFillContacts(final int filterType) {
+    private Disposable readAndFillContacts(final int filterType) {
         CQuery cQuery = CQuery.getInstance(getActivity());
         cQuery.filter(filterType);
-        cQuery.build(new IContact() {
+        return cQuery.build(new IContact() {
             @Override
             public void onContactSuccess(List<CList> mList) {
-                List<ItemData> mListAdapter = new ArrayList<>();
                 //Toast.makeText(getActivity(), " Contacts count " + mList.size(), Toast.LENGTH_SHORT).show();
                 if (mList != null && !mList.isEmpty()) {
                     for (CList cList : mList) {
-                        setUpContactList(filterType, cList, mListAdapter);
+                        setUpContactList(filterType, cList);
                     }
+
+                    mList.clear();
                 }
 
-                ContactAdapter mAdapter = new ContactAdapter(getActivity(), mListAdapter);
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                mRecyclerView.setAdapter(mAdapter);
+                updateList();
             }
 
             @Override
@@ -143,7 +166,11 @@ public class ContactInfoFragment extends Fragment {
 
     }
 
-    private void setUpContactList(int filter, CList cList, List<ItemData> mListAdapter) {
+    private void updateList() {
+        mAdapter.notifyDataSetChanged();
+    }
+
+    private void setUpContactList(int filter, CList cList) {
 
         switch (filter) {
             case ICFilter.ONLY_NAME:
@@ -157,9 +184,9 @@ public class ContactInfoFragment extends Fragment {
                     builder.append("Given Name - " + cName.getGivenName()).append(System.getProperty("line.separator"));
                     builder.append("Family Name - " + cName.getFamilyName()).append(System.getProperty("line.separator"));
 
-                    ItemData itemData = new ItemData(cList.contactId, builder.toString(), uriToBitmapConverter(cName.getPhotoUri()));
+                    ItemData itemData = new ItemData(cList.contactId, builder.toString(), null);
 
-                    mListAdapter.add(itemData);
+                    itemDataList.add(itemData);
 
                 }
 
@@ -182,8 +209,9 @@ public class ContactInfoFragment extends Fragment {
 
                     if (cPhone.getOther().size() > 0)
                         builder.append("Other - " + TextUtils.join(SEPERATOR, cPhone.getOther())).append(System.getProperty("line.separator"));
-                    ItemData itemData = new ItemData(cPhone.getDisplayName(), builder.toString(), uriToBitmapConverter(cPhone.getPhotoUri()));
-                    mListAdapter.add(itemData);
+
+                    ItemData itemData = new ItemData(cPhone.getDisplayName(), builder.toString(), null);
+                    itemDataList.add(itemData);
                 }
 
 
@@ -209,9 +237,9 @@ public class ContactInfoFragment extends Fragment {
                     if (cEmail.getOther().size() > 0)
                         builder.append("Other - ").append(TextUtils.join(SEPERATOR, cEmail.getOther())).append(System.getProperty("line.separator"));
 
-                    ItemData itemData = new ItemData(cList.getContactId(), builder.toString(), uriToBitmapConverter(cEmail.getPhotoUri()));
+                    ItemData itemData = new ItemData(cList.getContactId(), builder.toString(), null);
 
-                    mListAdapter.add(itemData);
+                    itemDataList.add(itemData);
 
                 }
 
@@ -226,9 +254,9 @@ public class ContactInfoFragment extends Fragment {
                     for (ContactGenericType contactGenericType : cAccount.getmGenericType()) {
                         builder.append("Name - " + contactGenericType.name).append(System.getProperty("line.separator") + contactGenericType.type);
                     }
-                    ItemData itemData = new ItemData(cList.contactId, builder.toString(), uriToBitmapConverter(cList.getPhotoUri()));
+                    ItemData itemData = new ItemData(cList.contactId, builder.toString(), null);
 
-                    mListAdapter.add(itemData);
+                    itemDataList.add(itemData);
 
                 }
                 break;
@@ -244,9 +272,9 @@ public class ContactInfoFragment extends Fragment {
                         builder.append("Company - " + companyDepart.getCompany()).append(System.getProperty("line.separator")).append("Org - " + companyDepart.getOrg());
                     }
 
-                    ItemData itemData = new ItemData(cList.contactId, builder.toString(), uriToBitmapConverter(cList.getPhotoUri()));
+                    ItemData itemData = new ItemData(cList.contactId, builder.toString(), null);
 
-                    mListAdapter.add(itemData);
+                    itemDataList.add(itemData);
 
                 }
                 break;
@@ -264,8 +292,8 @@ public class ContactInfoFragment extends Fragment {
                     if (!TextUtils.isEmpty(events.getAnniversay()))
                         builder.append(System.getProperty("line.separator")).append("Anniversary - " + events.getAnniversay());
 
-                    ItemData itemData = new ItemData(events.getDisplayName(), builder.toString(), uriToBitmapConverter(events.getPhotoUri()));
-                    mListAdapter.add(itemData);
+                    ItemData itemData = new ItemData(events.getDisplayName(), builder.toString(), null);
+                    itemDataList.add(itemData);
 
                 }
 
@@ -287,9 +315,9 @@ public class ContactInfoFragment extends Fragment {
 
                     }
 
-                    ItemData itemData = new ItemData(cList.contactId, builder.toString(), uriToBitmapConverter(cList.getPhotoUri()));
+                    ItemData itemData = new ItemData(cList.contactId, builder.toString(), null);
 
-                    mListAdapter.add(itemData);
+                    itemDataList.add(itemData);
 
                 }
 
@@ -305,24 +333,9 @@ public class ContactInfoFragment extends Fragment {
                         builder.append("City-" + postCity.getCity()).append(System.getProperty("line.separator")).append("Post " + postCity.getPost());
                     }
 
-                    ItemData itemData = new ItemData(postBoxCity.getDisplayName(), builder.toString(), uriToBitmapConverter(postBoxCity.getPhotoUri()));
+                    ItemData itemData = new ItemData(postBoxCity.getDisplayName(), builder.toString(), null);
 
-                    mListAdapter.add(itemData);
-
-                }
-
-                break;
-
-            case ICFilter.ONLY_PHOTO_URI:
-                String photoUri = cList.getPhotoUri();
-
-                if (photoUri != null) {
-
-                    StringBuilder builder = new StringBuilder();
-
-                    ItemData itemData = new ItemData(cList.contactId, builder.toString(), uriToBitmapConverter(cList.getPhotoUri()));
-
-                    mListAdapter.add(itemData);
+                    itemDataList.add(itemData);
 
                 }
 
@@ -336,6 +349,12 @@ public class ContactInfoFragment extends Fragment {
     }
 
 
+    /**
+     * Utility method to convert UriToBitmap
+     *
+     * @param uriString
+     * @return
+     */
     Bitmap uriToBitmapConverter(String uriString) {
         try {
             Uri uri = Uri.parse(uriString);

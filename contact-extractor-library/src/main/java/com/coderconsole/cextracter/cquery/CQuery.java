@@ -18,16 +18,21 @@
 package com.coderconsole.cextracter.cquery;
 
 import android.content.Context;
+
 import com.coderconsole.cextracter.common.permissions.PermissionWrapper;
 import com.coderconsole.cextracter.cquery.base.CList;
 import com.coderconsole.cextracter.cquery.base.CListExtractorAbstract;
 import com.coderconsole.cextracter.i.IContact;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.BiConsumer;
 import io.reactivex.internal.schedulers.IoScheduler;
+import io.reactivex.schedulers.Schedulers;
 
 public class CQuery {
 
@@ -45,12 +50,13 @@ public class CQuery {
 
     private int mListFilterType;
 
+    private List<Disposable> mDisposable = new ArrayList<>();
 
     private CQuery(Context context) {
         this.mContext = context;
     }
 
-    public final static CQuery getInstance(Context context) {
+    public static CQuery getInstance(Context context) {
         if (cQuery == null) {
             cQuery = new CQuery(context);
         }
@@ -73,14 +79,14 @@ public class CQuery {
         return this;
     }
 
-    public void build(final IContact iContact) {
+    public Disposable build(final IContact iContact) {
 
         if (!PermissionWrapper.hasContactsPermissions(mContext)) {
             throw new SecurityException("Contact Permission Missing");
         }
 
-        new CListExtractorAbstract(mContext).getList(mListFilterType, orderBy, limit, skip)
-                .subscribeOn(new IoScheduler())
+        return new CListExtractorAbstract(mContext).getList(mListFilterType, orderBy, limit, skip)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BiConsumer<List<CList>, Throwable>() {
                     @Override
@@ -90,10 +96,13 @@ public class CQuery {
 
                         if (throwable == null)
                             iContact.onContactSuccess(genericCLists);
+                        else
+                            iContact.onContactError(throwable);
+
+
                     }
                 });
     }
-
 
     public CQuery filter(int type) {
         mListFilterType = type;

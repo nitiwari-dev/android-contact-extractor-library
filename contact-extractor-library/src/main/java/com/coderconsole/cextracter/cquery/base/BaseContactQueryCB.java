@@ -20,6 +20,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.ContactsContract;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.coderconsole.cextracter.cmodels.CAccount;
@@ -53,7 +54,7 @@ public class BaseContactQueryCB implements IContactQuery {
 
     private CList cList;
 
-    public BaseContactQueryCB(Context context, Cursor cursor, CList cList, String identity) {
+    BaseContactQueryCB(Context context, Cursor cursor, CList cList, String identity) {
         this.context = context;
         this.identity = identity;
         this.cursor = cursor;
@@ -115,6 +116,7 @@ public class BaseContactQueryCB implements IContactQuery {
 
         CPhone cPhone = cList.getcPhone();
 
+
         if (cPhone == null) {
             cPhone = new CPhone();
         }
@@ -129,6 +131,8 @@ public class BaseContactQueryCB implements IContactQuery {
         String displayName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
         String photoUri = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI));
 
+        if (!isValidType(numberType))
+            return cPhone;
 
         switch (Integer.valueOf(numberType)) {
             case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
@@ -144,6 +148,7 @@ public class BaseContactQueryCB implements IContactQuery {
                 otherSet.add(phoneNo);
                 break;
         }
+
         cPhone.setHome(homeSet);
         cPhone.setMobile(mobileSet);
         cPhone.setWork(workSet);
@@ -152,6 +157,10 @@ public class BaseContactQueryCB implements IContactQuery {
         cPhone.setPhotoUri(photoUri);
 
         return cPhone;
+    }
+
+    private boolean isValidType(String numberType) {
+        return !TextUtils.isEmpty(numberType) && TextUtils.isDigitsOnly(numberType);
     }
 
     @Override
@@ -198,7 +207,7 @@ public class BaseContactQueryCB implements IContactQuery {
         String displayName = cursor.getString(
                 cursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.DISPLAY_NAME));
 
-        Log.d(TAG, "|Pobox" + poBox + "|City|" + city);
+        //Log.d(TAG, "|Pobox" + poBox + "|City|" + city);
         CPostBoxCity.PostCity postCity = new CPostBoxCity.PostCity();
         postCity.setCity(city);
         postCity.setPost(poBox);

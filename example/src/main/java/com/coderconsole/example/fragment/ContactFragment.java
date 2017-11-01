@@ -23,6 +23,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,10 +36,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ContactFragment extends Fragment {
-    private static final String ARG_CONTACT_TYPE = "contactTypeParam";
-
-    private String mContactType;
-
 
     private View mParentView;
     private ViewPager mcViewPager;
@@ -51,7 +48,6 @@ public class ContactFragment extends Fragment {
     public static ContactFragment newInstance(String cType) {
         ContactFragment fragment = new ContactFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_CONTACT_TYPE, cType);
         fragment.setArguments(args);
         return fragment;
     }
@@ -59,9 +55,6 @@ public class ContactFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mContactType = getArguments().getString(ARG_CONTACT_TYPE);
-        }
     }
 
     @Override
@@ -94,6 +87,7 @@ public class ContactFragment extends Fragment {
         adapter.addFrag(ContactInfoFragment.newInstance(ICFilter.ONLY_POSTCODE), "PostCode");
         adapter.addFrag(ContactInfoFragment.newInstance(ICFilter.ONLY_GROUPS), "Groups");
 
+
         mcViewPager.setAdapter(adapter);
         mTabLayout.setupWithViewPager(mcViewPager);
     }
@@ -109,7 +103,7 @@ public class ContactFragment extends Fragment {
     }
 
 
-    class ContactViewPagerAdapter extends FragmentPagerAdapter {
+    class ContactViewPagerAdapter extends FragmentStatePagerAdapter {
 
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
