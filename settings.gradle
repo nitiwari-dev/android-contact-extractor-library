@@ -14,4 +14,4 @@
  *   limitations under the License.
  */
 
-include ':example', ':contact-extractor-library'
+include ':example', ':contact-extractor'

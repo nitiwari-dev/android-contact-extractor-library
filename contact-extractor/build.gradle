@@ -1,0 +1,77 @@
+/*
+ *   Copyright (C) 2017 Nitesh Tiwari.
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */
+
+apply plugin: 'com.android.library'
+
+ext {
+    bintrayRepo = 'coderconsole'
+    bintrayName = 'contact-extractor'
+
+    publishedGroupId = 'com.coderconsole.cextracter'
+    libraryName = 'AndroidContactExtrator'
+    artifact = 'contact-extractor'
+
+    libraryDescription = 'Extract all the contacts from android \'Contacts\' application by using simple easy-to-use apis. It helps to remove the overhead of querying contact content provider.'
+
+    siteUrl = 'https://github.com/nitiwari-dev/android-contact-extractor'
+    gitUrl = 'https://github.com/nitiwari-dev/android-contact-extractor.git'
+
+    libraryVersion = '1.0.0'
+
+    developerId = 'nitiwari-dev'
+    developerName = 'Nitesh Tiwari'
+    developerEmail = 'nitiwari.dev@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion '26.0.2'
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    implementation 'com.android.support:appcompat-v7:24.2.1'
+    testImplementation 'junit:junit:4.12'
+
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+}
+
+//These two remote files contain Bintray configuration as described above.
+apply from: 'https://raw.githubusercontent.com/nitiwari-dev/dev-templates/master/android/bintray.gradle'
+apply from: 'https://raw.githubusercontent.com/nitiwari-dev/dev-templates/master/android/install.gradle'
