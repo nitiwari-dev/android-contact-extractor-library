@@ -1,4 +1,31 @@
-# android-contact-extractor
+# Android-Contact-Extractor
+
+[![platform](https://img.shields.io/badge/platform-Android-yellow.svg)](https://www.android.com)
+[![API](https://img.shields.io/badge/API-15%2B-brightgreen.svg?style=plastic)](https://android-arsenal.com/api?level=15)
+[![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg?style=flat-square)](https://www.apache.org/licenses/LICENSE-2.0.html)
+
+Extract all the contacts from android 'Contacts' application by using simple easy-to-use apis. It helps to remove the overhead of querying contact content provider.
+
+## Prerequisites
+
+Add permission in AndriodManifest.xml:
+
+```
+<uses-permission android:name="android.permission.READ_CONTACTS"/>
+```
+
+## Dependency
+
+Add this to your module's `build.gradle`
+
+```gradle
+dependencies {
+	...
+	compile 'com.coderconsole.cextracter:contact-extractor:1.0.0'
+}
+```
+
+# Output
 
 Extract all the contacts from android 'Contacts' application by using simple easy-to-use apis. It helps to remove the overhead of querying contact content provider.
 
@@ -6,38 +33,7 @@ Name             |  Phone
 :-------------------------:|:-------------------------:
 ![name](https://cloud.githubusercontent.com/assets/10304040/25949742/35328eec-3676-11e7-84b2-a864b30269ea.png) | ![phone](https://cloud.githubusercontent.com/assets/10304040/25949859/a4cb69f4-3676-11e7-96bf-8231f3694792.png)
 
-## Setup
-Add permission in AndriodManifest.xml
-                
-         <uses-permission android:name="android.permission.READ_CONTACTS"/>
-                
-###START###
-
-1. Build
-
-        $ git clone https://github.com/nitiwari-dev/android-contact-extractor.git
-        $ cd android-contact-extractor
-        $ gradlew contact-extractor-library:build
-
-2. Copy ``.aar`` file from ``/contact-extractor-library/builds/outputs/aar`` folder and place into ``libs`` folder of your project.
-
-3. Make sure you have below code within your module's ``build.gradle`` file
-               
-               repositories {
-                        jcenter()
-                        flatDir {
-                            dirs 'libs' //this way we can find the .aar file in libs folder
-                        }
-                }
- 
- 4. Add within the dependencies section of module ``build.gradle`` file
- 
-                compile(name: 'contact-extractor-library', ext: 'aar')
-                
-                
- ###END###
- 
-## Few Examples:
+## Examples:
 
 ###### Extract all the PHONE - Its contains home/work/phone/other contacts within as ``HashSet<String>``
 
