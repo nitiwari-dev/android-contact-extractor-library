@@ -22,7 +22,7 @@ Add this to your module's `build.gradle`
 ```gradle
 dependencies {
 	...
-	compile 'com.coderconsole.cextracter:contact-extractor:1.0.0'
+	implementation 'com.coderconsole.cextracter:contact-extractor:1.0.0'
 }
 ```
 
