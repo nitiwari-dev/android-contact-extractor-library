@@ -19,11 +19,29 @@ Add permission in AndriodManifest.xml:
 
 Add this to your module's `build.gradle`
 
-```gradle
+Gradle
+```
 dependencies {
 	...
 	implementation 'com.coderconsole.cextracter:contact-extractor:1.0.0'
 }
+```
+
+Maven
+```
+<dependency>
+  <groupId>com.coderconsole.cextracter</groupId>
+  <artifactId>contact-extractor</artifactId>
+  <version>1.0.0</version>
+  <type>pom</type>
+</dependency>
+```
+
+Ivy
+```
+<dependency org='com.coderconsole.cextracter' name='contact-extractor' rev='1.0.0'>
+  <artifact name='contact-extractor' ext='pom' ></artifact>
+</dependency>
 ```
 
 # Output
