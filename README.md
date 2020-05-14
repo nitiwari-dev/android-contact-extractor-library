@@ -60,7 +60,7 @@ Name             |  Phone
         cQuery.filter(ICFilter.ONLY_PHONE);
         cQuery.build(new IContact() {
             @Override
-            public void onContactSuccess(List<CList> mList) {
+            public void onContactSuccess(List<CList> cList) {
                 if (cList != null && cList.size() > 0) {
                     CPhone cPhone = cList.getcPhone();
                     HashSet<String> home = cPhone.getHome();
@@ -83,7 +83,7 @@ Name             |  Phone
         cQuery.filter(ICFilter.ONLY_EMAIL);
         cQuery.build(new IContact() {
             @Override
-            public void onContactSuccess(List<CList> mList) {
+            public void onContactSuccess(List<CList> cList) {
                 if (cList != null && cList.size() > 0) {
                       CEmail cEmail = cList.getcEmail();
                       HashSet<String> home = cEmail.getHome();
@@ -106,7 +106,7 @@ Name             |  Phone
         cQuery.filter(ICFilter.ONLY_ACCOUNT);
         cQuery.build(new IContact() {
             @Override
-            public void onContactSuccess(List<CList> mList) {
+            public void onContactSuccess(List<CList> cList) {
                 if (cList != null && cList.size() > 0) {
                        CAccount cAccount = cList.getcAccount();
                 }
@@ -129,7 +129,7 @@ Please do follows us on [TWITTER](https://twitter.com/coderconsole) and check ou
 #codingIsAnArt
 
 ## Licence
-        Copyright (C) 2019 Nitesh Tiwari.
+        Copyright (C) 2020 Nitesh Tiwari.
   
         Licensed under the Apache License, Version 2.0 (the "License");
         you may not use this file except in compliance with the License.
