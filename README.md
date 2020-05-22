@@ -1,4 +1,4 @@
-# Android-Contact-Extractor
+# Android-Contact-Extractor-Library
 
 [![platform](https://img.shields.io/badge/platform-Android-yellow.svg)](https://www.android.com)
 [ ![Download](https://api.bintray.com/packages/nitiwari-dev/coderconsole/contact-extractor/images/download.svg) ](https://bintray.com/nitiwari-dev/coderconsole/contact-extractor/_latestVersion)
