@@ -72,6 +72,6 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
 }
 
-//These two remote files contain Bintray configuration as described above.
-apply from: 'https://raw.githubusercontent.com/nitiwari-dev/dev-templates/master/android/bintray.gradle'
-apply from: 'https://raw.githubusercontent.com/nitiwari-dev/dev-templates/master/android/install.gradle'
+//These two remote files contain Bintray configuration as described above. Uncomment to build bintray 
+#apply from: 'https://raw.githubusercontent.com/nitiwari-dev/dev-templates/master/android/bintray.gradle'
+#apply from: 'https://raw.githubusercontent.com/nitiwari-dev/dev-templates/master/android/install.gradle'
