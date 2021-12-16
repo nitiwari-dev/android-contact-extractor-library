@@ -129,7 +129,7 @@ Please do follows us on [TWITTER](https://twitter.com/coderconsole) and check ou
 #codingIsAnArt
 
 ## Licence
-        Copyright (C) 2020 Nitesh Tiwari.
+        Copyright (C) 2021 Nitesh Tiwari.
   
         Licensed under the Apache License, Version 2.0 (the "License");
         you may not use this file except in compliance with the License.
